@@ -17,25 +17,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package com.github.crafterslife.dev.papertemplate.commands;
+package com.github.crafterslife.dev.papertemplate.paper;
 
-import com.mojang.brigadier.tree.LiteralCommandNode;
-import io.papermc.paper.command.brigadier.CommandSourceStack;
 import org.jspecify.annotations.NullMarked;
 
-import java.util.List;
-
 @NullMarked
-@SuppressWarnings("UnstableApiUsage")
-public sealed interface InternalCommand permits AdminCommand {
+public final class TemplatePermissions {
 
-    LiteralCommandNode<CommandSourceStack> create();
+    private static final String PREFIX = "template."; // TODO: 小文字のプラグイン名+.に書き換えてね
 
-    default String description() {
-        return "A PluginTemplate provided command"; // TODO: 書き換えてね
+    private TemplatePermissions() {
+
     }
 
-    default List<String> aliases() {
-        return List.of();
-    }
+    public static final String COMMAND_ADMIN = PREFIX + "command.admin";
+    public static final String COMMAND_ADMIN_RELOAD = COMMAND_ADMIN + ".reload";
 }

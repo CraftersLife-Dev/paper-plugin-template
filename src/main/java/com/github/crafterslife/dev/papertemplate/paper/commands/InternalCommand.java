@@ -17,19 +17,25 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package com.github.crafterslife.dev.papertemplate;
+package com.github.crafterslife.dev.papertemplate.paper.commands;
 
-import io.papermc.paper.plugin.loader.PluginClasspathBuilder;
-import io.papermc.paper.plugin.loader.PluginLoader;
+import com.mojang.brigadier.tree.LiteralCommandNode;
+import io.papermc.paper.command.brigadier.CommandSourceStack;
 import org.jspecify.annotations.NullMarked;
-import xyz.jpenilla.gremlin.runtime.platformsupport.DefaultsPaperPluginLoader;
+
+import java.util.List;
 
 @NullMarked
-@SuppressWarnings({"UnstableApiUsage", "unused"})
-public final class TemplateLoader implements PluginLoader {
+@SuppressWarnings("UnstableApiUsage")
+public sealed interface InternalCommand permits AdminCommand {
 
-    @Override
-    public void classloader(final PluginClasspathBuilder classpathBuilder) {
-        new DefaultsPaperPluginLoader().classloader(classpathBuilder);
+    LiteralCommandNode<CommandSourceStack> create();
+
+    default String description() {
+        return "A PluginTemplate provided command"; // TODO: 書き換えてね
+    }
+
+    default List<String> aliases() {
+        return List.of();
     }
 }

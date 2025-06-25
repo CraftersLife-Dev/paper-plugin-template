@@ -17,10 +17,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package com.github.crafterslife.dev.papertemplate.commands;
+package com.github.crafterslife.dev.papertemplate.paper.commands;
 
-import com.github.crafterslife.dev.papertemplate.TemplateContext;
-import com.github.crafterslife.dev.papertemplate.TemplatePermissions;
+import com.github.crafterslife.dev.papertemplate.paper.TemplateContext;
+import com.github.crafterslife.dev.papertemplate.paper.TemplatePermissions;
 import com.github.crafterslife.dev.papertemplate.configuration.ConfigManager;
 import com.github.crafterslife.dev.papertemplate.message.TranslationMessages;
 import com.github.crafterslife.dev.papertemplate.message.TranslationRegistry;

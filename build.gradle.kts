@@ -38,9 +38,9 @@ paperPluginYaml {
     website = "https://github.com/CraftersLife-Dev"
     apiVersion = "1.21"
 
-    main = "$mainPackage.TemplatePlugin" // TODO: JavaPluginの具象クラス名に変えてね
-    bootstrapper = "$mainPackage.TemplateBootstrap" // TODO: PluginBootstrapの具象クラス名に変えてね
-    loader = "$mainPackage.TemplateLoader" // TODO: PluginLoaderの具象クラス名に変えてね
+    main = "$mainPackage.paper.TemplatePlugin" // TODO: JavaPluginの具象クラス名に変えてね
+    bootstrapper = "$mainPackage.paper.TemplateBootstrap" // TODO: PluginBootstrapの具象クラス名に変えてね
+    loader = "$mainPackage.paper.TemplateLoader" // TODO: PluginLoaderの具象クラス名に変えてね
 
     permissions {
         register("${rootProject.name.lowercase()}.command.admin") {

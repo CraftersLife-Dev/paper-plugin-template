@@ -17,19 +17,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package com.github.crafterslife.dev.papertemplate;
+package com.github.crafterslife.dev.papertemplate.paper;
 
-import org.jspecify.annotations.NullMarked;
+import com.github.crafterslife.dev.papertemplate.configuration.ConfigManager;
+import com.github.crafterslife.dev.papertemplate.message.TranslationRegistry;
+import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 
-@NullMarked
-public final class TemplatePermissions {
+public record TemplateContext(ComponentLogger logger, ConfigManager configManager, TranslationRegistry translationRegistry) {
 
-    private static final String PREFIX = "template."; // TODO: 小文字のプラグイン名+.に書き換えてね
-
-    private TemplatePermissions() {
-
-    }
-
-    public static final String COMMAND_ADMIN = PREFIX + "command.admin";
-    public static final String COMMAND_ADMIN_RELOAD = COMMAND_ADMIN + ".reload";
 }
