@@ -26,13 +26,14 @@ import org.jspecify.annotations.NullMarked;
 import org.spongepowered.configurate.CommentedConfigurationNode;
 import org.spongepowered.configurate.ConfigurateException;
 import org.spongepowered.configurate.loader.ConfigurationLoader;
+import org.spongepowered.configurate.loader.HeaderMode;
 import org.spongepowered.configurate.yaml.NodeStyle;
 import org.spongepowered.configurate.yaml.YamlConfigurationLoader;
 
 import java.nio.file.Path;
 
 @NullMarked
-public final class ConfigurationManager {
+public final class ConfigManager {
 
     private static final String PRIMARY_CONFIG_FILE_NAME = "config.yml";
 
@@ -41,7 +42,7 @@ public final class ConfigurationManager {
 
     private @MonotonicNonNull PrimaryConfig primaryConfig;
 
-    private ConfigurationManager(
+    private ConfigManager(
             final Path dataDirectory,
             final ComponentLogger logger
     ) {
@@ -73,6 +74,7 @@ public final class ConfigurationManager {
                             .serializers(serializerBuilder -> serializerBuilder
                                     .registerAll(kyoriSerializer.serializers()));
                 })
+                .headerMode(HeaderMode.PRESET)
                 .path(file)
                 .build();
     }

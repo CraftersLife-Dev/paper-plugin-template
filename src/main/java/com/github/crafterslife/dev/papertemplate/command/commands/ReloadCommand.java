@@ -19,7 +19,7 @@
  */
 package com.github.crafterslife.dev.papertemplate.command.commands;
 
-import com.github.crafterslife.dev.papertemplate.configuration.ConfigurationManager;
+import com.github.crafterslife.dev.papertemplate.configuration.ConfigManager;
 import com.github.crafterslife.dev.papertemplate.message.TranslationMessages;
 import com.github.crafterslife.dev.papertemplate.message.TranslationRegistry;
 import com.mojang.brigadier.Command;
@@ -32,11 +32,11 @@ import org.jspecify.annotations.NullMarked;
 @SuppressWarnings("UnstableApiUsage")
 public final class ReloadCommand implements PluginCommand {
 
-    private final ConfigurationManager configManager;
+    private final ConfigManager configManager;
     private final TranslationRegistry translationRegistry;
 
     public ReloadCommand(
-            final ConfigurationManager configManager,
+            final ConfigManager configManager,
             final TranslationRegistry translationRegistry
     ) {
         this.configManager = configManager;
