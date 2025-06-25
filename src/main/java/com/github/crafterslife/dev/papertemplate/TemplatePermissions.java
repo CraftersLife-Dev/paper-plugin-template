@@ -17,18 +17,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package com.github.crafterslife.dev.papertemplate.command.commands;
+package com.github.crafterslife.dev.papertemplate;
 
-import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-import io.papermc.paper.command.brigadier.CommandSourceStack;
-import io.papermc.paper.command.brigadier.Commands;
 import org.jspecify.annotations.NullMarked;
 
 @NullMarked
-@SuppressWarnings("UnstableApiUsage")
-public final class RootCommand implements PluginCommand {
-    @Override
-    public LiteralArgumentBuilder<CommandSourceStack> node() {
-        return Commands.literal("plugin"); // TODO: change
+public final class TemplatePermissions {
+
+    private static final String PREFIX = "template."; // TODO: 小文字のプラグイン名+.に書き換えてね
+
+    private TemplatePermissions() {
+
     }
+
+    public static final String COMMAND_ADMIN = PREFIX + "command.admin";
+    public static final String COMMAND_ADMIN_RELOAD = COMMAND_ADMIN + ".reload";
 }

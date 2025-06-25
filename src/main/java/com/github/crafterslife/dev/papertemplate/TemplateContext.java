@@ -19,8 +19,10 @@
  */
 package com.github.crafterslife.dev.papertemplate;
 
-import org.jspecify.annotations.NullMarked;
+import com.github.crafterslife.dev.papertemplate.configuration.ConfigManager;
+import com.github.crafterslife.dev.papertemplate.message.TranslationRegistry;
+import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 
-@NullMarked
-public final class TemplateContext {
+public record TemplateContext(ComponentLogger logger, ConfigManager configManager, TranslationRegistry translationRegistry) {
+
 }

@@ -6,11 +6,11 @@ version = projectVersion
 
 plugins {
     id("java")
-    id("com.gradleup.shadow") version "9.0.0-beta17"
-    id("xyz.jpenilla.resource-factory-paper-convention") version "1.3.0"
-    id("xyz.jpenilla.run-paper") version "2.3.1"
-    id("xyz.jpenilla.gremlin-gradle") version "0.0.8"
-    id("net.kyori.indra.licenser.spotless") version "3.1.3"
+    alias(libs.plugins.shadow)
+    alias(libs.plugins.resource.factory)
+    alias(libs.plugins.run.paper)
+    alias(libs.plugins.gremlin)
+    alias(libs.plugins.indra.licenser.spotless)
 }
 
 java {
@@ -19,21 +19,22 @@ java {
 
 dependencies {
     // Paper
-    compileOnly("io.papermc.paper:paper-api:1.21.4-R0.1-SNAPSHOT") {
-        exclude("net.md-5")
+    compileOnly(libs.paper.api) {
+        exclude("net.md-5") // すごい邪魔
     }
 
     // Integrations
-    compileOnly("io.github.miniplaceholders:miniplaceholders-api:2.3.0") // MiniPlaceholders
+    compileOnly(libs.mini.placeholders)
 
     // Libraries
-    runtimeDownload("org.spongepowered:configurate-yaml:4.2.0") // config
-    runtimeDownload("net.kyori:adventure-serializer-configurate4:4.23.0") // config serializer
+    compileOnly(libs.configurate.yaml) // Paperに組み込んである
+    runtimeDownload(libs.adventure.serializer.configurate)
 }
 
 val mainPackage = "$group.${rootProject.name.lowercase()}"
 paperPluginYaml {
-    author = "Namiu/うにたろう"
+    name = rootProject.name
+    author = "Namiu/うにたろう" // TODO: 自分の名前に変えてね
     website = "https://github.com/CraftersLife-Dev"
     apiVersion = "1.21"
 
@@ -42,8 +43,12 @@ paperPluginYaml {
     loader = "$mainPackage.TemplateLoader" // TODO: PluginLoaderの具象クラス名に変えてね
 
     permissions {
-        register("${rootProject.name.lowercase()}.command.reload") {
-            description = "Reloads ${rootProject.name}'s config."
+        register("${rootProject.name.lowercase()}.command.admin") {
+            description = "${paperPluginYaml.name}の管理者系コマンド"
+            default = Permission.Default.OP
+        }
+        register("${rootProject.name.lowercase()}.command.admin.reload") {
+            description = "${paperPluginYaml.name}の設定を再読み込みするコマンド"
             default = Permission.Default.OP
         }
     }
@@ -82,7 +87,7 @@ tasks {
         // runディレクトリの中にlog4j2.xmlを突っ込むとログの設定を変更可能
         // Paper: https://github.com/PaperMC/Paper/blob/main/paper-server/src/main/resources/log4j2.xml
         systemProperty("log4j.configurationFile", "log4j2.xml")
-        minecraftVersion("1.21.4")
+        minecraftVersion(libs.versions.minecraft.get())
         downloadPlugins {
             modrinth("luckperms", "v5.5.0-bukkit")
             modrinth("miniplaceholders", "wck4v0R0")

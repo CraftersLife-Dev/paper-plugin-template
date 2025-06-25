@@ -63,26 +63,4 @@ public final class MoreFiles {
             }
         }
     }
-
-    public static void copyFileIfNotExists(final Path sourcePath, final Path parentDirectory) throws IOException {
-        if (!Files.isRegularFile(sourcePath) && !Files.isDirectory(parentDirectory)) {
-            return;
-        }
-
-        final Path fileName = sourcePath.getFileName();
-        final Path targetPath = parentDirectory.resolve(fileName);
-
-        try {
-            Files.copy(sourcePath, targetPath);
-        } catch (final FileAlreadyExistsException ignore) {
-            // ignore
-        }
-
-//        try (final InputStream inputStream = Files.newInputStream(sourcePath);
-//             final OutputStream outputStream = Files.newOutputStream(parentDirectory)) {
-//            inputStream.transferTo(outputStream);
-//        } catch (final IOException exception) {
-//            throw new UncheckedIOException("Unable to copy file: %s".formatted(sourcePath), exception);
-//        }
-    }
 }

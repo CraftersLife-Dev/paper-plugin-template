@@ -19,13 +19,23 @@
  */
 package com.github.crafterslife.dev.papertemplate.listeners;
 
+import com.github.crafterslife.dev.papertemplate.TemplateContext;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.jspecify.annotations.NullMarked;
 
 @NullMarked
 public final class TemplateListener implements Listener {
 
-    private TemplateListener() {
+    private final TemplateContext context;
+
+    public TemplateListener(final TemplateContext context) {
+        this.context = context;
+    }
+
+    @EventHandler
+    private void onInteracted(final PlayerInteractEvent event) {
 
     }
 }

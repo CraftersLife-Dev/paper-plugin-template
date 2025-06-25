@@ -37,17 +37,17 @@ public final class ConfigManager {
 
     private static final String PRIMARY_CONFIG_FILE_NAME = "config.yml";
 
-    private final Path dataDirectory;
     private final ComponentLogger logger;
+    private final Path dataDirectory;
 
     private @MonotonicNonNull PrimaryConfig primaryConfig;
 
-    private ConfigManager(
-            final Path dataDirectory,
-            final ComponentLogger logger
+    public ConfigManager(
+            final ComponentLogger logger,
+            final Path dataDirectory
     ) {
-        this.dataDirectory = dataDirectory;
         this.logger = logger;
+        this.dataDirectory = dataDirectory;
     }
 
     public void reloadConfigurations() {

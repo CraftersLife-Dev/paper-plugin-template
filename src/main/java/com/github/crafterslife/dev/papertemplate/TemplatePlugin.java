@@ -19,19 +19,33 @@
  */
 package com.github.crafterslife.dev.papertemplate;
 
+import com.github.crafterslife.dev.papertemplate.listeners.TemplateListener;
+import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jspecify.annotations.NullMarked;
+
+import java.util.Set;
+import java.util.function.Function;
 
 @NullMarked
 public final class TemplatePlugin extends JavaPlugin { // TODO: プラグイン名に変えてね
 
-    public TemplatePlugin(final TemplateContext templateContext) {
+    private final TemplateContext context;
+    private final Set<Function<TemplateContext, Listener>> listenerFactories;
+
+    public TemplatePlugin(final TemplateContext context) {
+        this.context = context;
+        this.listenerFactories = Set.of(
+                TemplateListener::new
+        );
     }
 
     @Override
     public void onEnable() {
-//        for (final Listener listener : this.listeners) {
-//            this.getServer().getPluginManager().registerEvents(listener, this);
-//        }
+
+        // リスナーを登録する
+        this.listenerFactories.stream()
+                .map(factory -> factory.apply(this.context))
+                .forEach(listener -> this.getServer().getPluginManager().registerEvents(listener, this));
     }
 }

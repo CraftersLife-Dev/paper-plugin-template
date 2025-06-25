@@ -17,9 +17,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package com.github.crafterslife.dev.papertemplate.command.commands;
+package com.github.crafterslife.dev.papertemplate.commands;
 
-import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import com.mojang.brigadier.tree.LiteralCommandNode;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import org.jspecify.annotations.NullMarked;
 
@@ -27,15 +27,15 @@ import java.util.List;
 
 @NullMarked
 @SuppressWarnings("UnstableApiUsage")
-public interface PluginCommand { //TODO change
+public sealed interface InternalCommand permits AdminCommand {
 
-    LiteralArgumentBuilder<CommandSourceStack> node();
+    LiteralCommandNode<CommandSourceStack> create();
+
+    default String description() {
+        return "A PluginTemplate provided command"; // TODO: 書き換えてね
+    }
 
     default List<String> aliases() {
         return List.of();
-    }
-
-    default String description() {
-        return "A PluginTemplate provided command"; // TODO: change
     }
 }

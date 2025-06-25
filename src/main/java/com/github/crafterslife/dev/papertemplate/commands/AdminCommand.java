@@ -17,42 +17,45 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package com.github.crafterslife.dev.papertemplate.command.commands;
+package com.github.crafterslife.dev.papertemplate.commands;
 
+import com.github.crafterslife.dev.papertemplate.TemplateContext;
+import com.github.crafterslife.dev.papertemplate.TemplatePermissions;
 import com.github.crafterslife.dev.papertemplate.configuration.ConfigManager;
 import com.github.crafterslife.dev.papertemplate.message.TranslationMessages;
 import com.github.crafterslife.dev.papertemplate.message.TranslationRegistry;
 import com.mojang.brigadier.Command;
-import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import com.mojang.brigadier.tree.LiteralCommandNode;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
 import org.jspecify.annotations.NullMarked;
 
 @NullMarked
 @SuppressWarnings("UnstableApiUsage")
-public final class ReloadCommand implements PluginCommand {
+public final class AdminCommand implements InternalCommand {
 
     private final ConfigManager configManager;
     private final TranslationRegistry translationRegistry;
 
-    public ReloadCommand(
-            final ConfigManager configManager,
-            final TranslationRegistry translationRegistry
-    ) {
-        this.configManager = configManager;
-        this.translationRegistry = translationRegistry;
+    public AdminCommand(final TemplateContext context) {
+        this.configManager = context.configManager();
+        this.translationRegistry = context.translationRegistry();
     }
 
     @Override
-    public LiteralArgumentBuilder<CommandSourceStack> node() {
-        return Commands.literal("reload")
-                .requires(context -> context.getSender().hasPermission("plugin.reload")) //TODO change
+    public LiteralCommandNode<CommandSourceStack> create() {
+        final var reload = Commands.literal("reload")
+                .requires(context -> context.getSender().hasPermission(TemplatePermissions.COMMAND_ADMIN_RELOAD))
                 .executes(context -> {
                     this.configManager.reloadConfigurations();
                     this.translationRegistry.reloadTranslations();
                     TranslationMessages.configReloadSuccess(context.getSource().getSender());
-
                     return Command.SINGLE_SUCCESS;
                 });
+
+        return Commands.literal("template") // TODO: 小文字のプラグイン名に変えてね。
+                .requires(context -> context.getSender().hasPermission(TemplatePermissions.COMMAND_ADMIN))
+                .then(reload)
+                .build();
     }
 }

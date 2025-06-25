@@ -31,6 +31,7 @@ import org.jspecify.annotations.NullMarked;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Locale;
@@ -88,16 +89,18 @@ public final class TranslationRegistry {
         this.loadFromResourceBundle();
         GlobalTranslator.translator().addSource(this.translationStore);
 
-        final String stringLocales = this.installedLocales.stream()
+        final String locales = this.installedLocales.stream()
                 .map(Locale::toString)
                 .collect(Collectors.joining(", "));
-        this.logger.info("{}言語の翻訳の読み込みに成功: [{}]", this.installedLocales.size(), stringLocales);
+        this.logger.info("翻訳の読み込みに成功: [{}]", locales);
     }
 
     private void loadFromUserDirectory() {
-        try (final Stream<Path> pathStream = Files.list(this.pluginSource.resolve(TRANSLATIONS_DIRECTORY_NAME))) {
+        try (final Stream<Path> pathStream = Files.list(this.translationsDirectory)) {
             pathStream
-                    .filter(this::isTranslationFile)
+                    .filter(Files::isRegularFile)
+                    .filter(file -> file.startsWith("messages_"))
+                    .filter(file -> file.endsWith(".properties"))
                     .forEach(translationFile -> {
                         final Locale locale = this.extractLocale(translationFile);
                         this.translationStore.registerAll(locale, translationFile, true);
@@ -110,25 +113,23 @@ public final class TranslationRegistry {
 
     private void loadFromResourceBundle() {
         try {
-            MoreFiles.walkAsDirectory(this.pluginSource.resolve("translations"), pathStream -> pathStream
-                    .filter(this::isTranslationFile)
+            MoreFiles.walkAsDirectory(this.pluginSource, pathStream -> pathStream
+                    .filter(Files::isRegularFile)
+                    .filter(file -> file.toString().startsWith("/translations/messages_"))
+                    .filter(file -> file.toString().endsWith(".properties"))
                     .map(file -> {
                         final Locale locale = this.extractLocale(file);
-                        final ResourceBundle bundle = ResourceBundle.getBundle("messages", locale, UTF8ResourceBundleControl.get());
+                        final ResourceBundle bundle = ResourceBundle.getBundle("translations/messages", locale, UTF8ResourceBundleControl.get());
                         return Map.entry(bundle, file);
                     })
                     .forEach(entry -> {
                         this.translationStore.registerAll(entry.getKey().getLocale(), entry.getKey(), true);
                         this.installedLocales.add(entry.getKey().getLocale());
-                        this.writeUserDirectoryFrom(pluginSource);
+                        this.copyTranslationsDirectoryFrom(entry.getValue());
                     }));
         } catch (final IOException exception) {
             throw new UncheckedIOException(exception);
         }
-    }
-
-    private boolean isTranslationFile(final Path targetPath) {
-        return Files.isRegularFile(targetPath) && targetPath.startsWith("messages_") && targetPath.endsWith(".properties");
     }
 
     private Locale extractLocale(final Path targetPath) {
@@ -142,9 +143,12 @@ public final class TranslationRegistry {
         return locale;
     }
 
-    private void writeUserDirectoryFrom(final Path sourcePath) {
+    private void copyTranslationsDirectoryFrom(final Path sourcePath) {
         try {
-            MoreFiles.copyFileIfNotExists(sourcePath, this.translationsDirectory);
+            final String fileName = sourcePath.getFileName().toString();
+            Files.copy(sourcePath, this.translationsDirectory.resolve(fileName));
+        } catch (final FileAlreadyExistsException ignore) {
+            // ignore
         } catch (final IOException exception) {
             throw new UncheckedIOException(exception);
         }
