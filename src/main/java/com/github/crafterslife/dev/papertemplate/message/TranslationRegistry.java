@@ -19,7 +19,7 @@
  */
 package com.github.crafterslife.dev.papertemplate.message;
 
-import com.github.crafterslife.dev.papertemplate.util.MoreFiles;
+import com.github.crafterslife.dev.papertemplate.utility.MoreFiles;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import net.kyori.adventure.text.minimessage.translation.MiniMessageTranslationStore;
