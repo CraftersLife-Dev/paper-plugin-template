@@ -47,7 +47,7 @@
 
 ## Java ライブラリ
 
-### [Paper Plugins API](https://docs.papermc.io/paper/dev/getting-started/paper-plugins)
+### [Paper API](https://docs.papermc.io/paper/dev/getting-started/paper-plugins)
 
 - **概要**: 説明不要。
 - **メリット**:
