@@ -1,7 +1,7 @@
 /*
- * PluginTemplate
+ * PaperTemplate
  *
- * Copyright (c) 2025. Namiu/Unitarou
+ * Copyright (c) 2025. Namiu/うにたろう
  *                     Contributors []
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,12 +17,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package com.github.namiuni.plugintemplate.command.commands;
+package com.github.crafterslife.dev.papertemplate.command.commands;
 
-import com.github.namiuni.plugintemplate.configuration.ConfigurationManager;
-import com.github.namiuni.plugintemplate.translation.TranslationService;
-import com.github.namiuni.plugintemplate.translation.TranslationSource;
-import com.google.inject.Inject;
+import com.github.crafterslife.dev.papertemplate.configuration.ConfigurationManager;
+import com.github.crafterslife.dev.papertemplate.message.TranslationMessages;
+import com.github.crafterslife.dev.papertemplate.message.TranslationRegistry;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
@@ -34,18 +33,14 @@ import org.jspecify.annotations.NullMarked;
 public final class ReloadCommand implements PluginCommand {
 
     private final ConfigurationManager configManager;
-    private final TranslationSource translationSource;
-    private final TranslationService translationService;
+    private final TranslationRegistry translationRegistry;
 
-    @Inject
-    private ReloadCommand(
+    public ReloadCommand(
             final ConfigurationManager configManager,
-            final TranslationSource translationSource,
-            final TranslationService translationService
+            final TranslationRegistry translationRegistry
     ) {
         this.configManager = configManager;
-        this.translationSource = translationSource;
-        this.translationService = translationService;
+        this.translationRegistry = translationRegistry;
     }
 
     @Override
@@ -53,9 +48,10 @@ public final class ReloadCommand implements PluginCommand {
         return Commands.literal("reload")
                 .requires(context -> context.getSender().hasPermission("plugin.reload")) //TODO change
                 .executes(context -> {
-                    this.configManager.loadConfigurations();
-                    this.translationSource.loadTranslations();
-                    this.translationService.configReloadSuccess(context.getSource().getSender());
+                    this.configManager.reloadConfigurations();
+                    this.translationRegistry.reloadTranslations();
+                    TranslationMessages.configReloadSuccess(context.getSource().getSender());
+
                     return Command.SINGLE_SUCCESS;
                 });
     }

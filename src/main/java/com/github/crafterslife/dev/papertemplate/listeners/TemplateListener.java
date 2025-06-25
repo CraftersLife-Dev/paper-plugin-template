@@ -1,7 +1,7 @@
 /*
- * PluginTemplate
+ * PaperTemplate
  *
- * Copyright (c) 2025. Namiu/Unitarou
+ * Copyright (c) 2025. Namiu/うにたろう
  *                     Contributors []
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,20 +17,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package com.github.namiuni.plugintemplate;
+package com.github.crafterslife.dev.papertemplate.listeners;
 
-import jakarta.inject.Qualifier;
+import org.bukkit.event.Listener;
+import org.jspecify.annotations.NullMarked;
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.Target;
+@NullMarked
+public final class TemplateListener implements Listener {
 
-import static java.lang.annotation.ElementType.FIELD;
-import static java.lang.annotation.ElementType.PARAMETER;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
+    private TemplateListener() {
 
-@Qualifier
-@Target({FIELD, PARAMETER})
-@Retention(RUNTIME)
-public @interface DataDirectory {
-
+    }
 }

@@ -1,0 +1,152 @@
+/*
+ * PaperTemplate
+ *
+ * Copyright (c) 2025. Namiu/うにたろう
+ *                     Contributors []
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+package com.github.crafterslife.dev.papertemplate.message;
+
+import com.github.crafterslife.dev.papertemplate.util.MoreFiles;
+import net.kyori.adventure.key.Key;
+import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
+import net.kyori.adventure.text.minimessage.translation.MiniMessageTranslationStore;
+import net.kyori.adventure.translation.GlobalTranslator;
+import net.kyori.adventure.translation.Translator;
+import net.kyori.adventure.util.UTF8ResourceBundleControl;
+import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
+import org.jspecify.annotations.NullMarked;
+
+import java.io.IOException;
+import java.io.UncheckedIOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Locale;
+import java.util.Map;
+import java.util.ResourceBundle;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+@NullMarked
+public final class TranslationRegistry {
+
+    private static final Locale FALLBACK_LOCALE = Locale.JAPANESE;
+    private static final String TRANSLATIONS_DIRECTORY_NAME = "translations";
+
+    private final ComponentLogger logger;
+    private final Path pluginSource;
+
+    private final Path translationsDirectory;
+    private final Set<Locale> installedLocales;
+
+    private @MonotonicNonNull MiniMessageTranslationStore translationStore;
+
+    public TranslationRegistry(
+            final ComponentLogger logger,
+            final Path pluginSource,
+            final Path dataDirectory
+    ) {
+        this.logger = logger;
+        this.pluginSource = pluginSource;
+
+        this.translationsDirectory = dataDirectory.resolve(TRANSLATIONS_DIRECTORY_NAME);
+        this.installedLocales = ConcurrentHashMap.newKeySet();
+
+        try {
+            MoreFiles.createDirectoriesIfNotExists(this.translationsDirectory);
+        } catch (final IOException exception) {
+            throw new UncheckedIOException(exception);
+        }
+    }
+
+    public void reloadTranslations() {
+        this.logger.info("翻訳を読み込み中...");
+        if (this.translationStore != null) {
+            GlobalTranslator.translator().removeSource(this.translationStore);
+            this.installedLocales.clear();
+        }
+
+        final Key translationKey = Key.key("template", "messages"); // TODO: namespaceはプラグイン名に変えてね
+        this.translationStore = MiniMessageTranslationStore.create(translationKey);
+        this.translationStore.defaultLocale(FALLBACK_LOCALE);
+
+        this.loadFromUserDirectory();
+        this.loadFromResourceBundle();
+        GlobalTranslator.translator().addSource(this.translationStore);
+
+        final String stringLocales = this.installedLocales.stream()
+                .map(Locale::toString)
+                .collect(Collectors.joining(", "));
+        this.logger.info("{}言語の翻訳の読み込みに成功: [{}]", this.installedLocales.size(), stringLocales);
+    }
+
+    private void loadFromUserDirectory() {
+        try (final Stream<Path> pathStream = Files.list(this.pluginSource.resolve(TRANSLATIONS_DIRECTORY_NAME))) {
+            pathStream
+                    .filter(this::isTranslationFile)
+                    .forEach(translationFile -> {
+                        final Locale locale = this.extractLocale(translationFile);
+                        this.translationStore.registerAll(locale, translationFile, true);
+                        this.installedLocales.add(locale);
+                    });
+        } catch (final IOException exception) {
+            throw new UncheckedIOException(exception);
+        }
+    }
+
+    private void loadFromResourceBundle() {
+        try {
+            MoreFiles.walkAsDirectory(this.pluginSource.resolve("translations"), pathStream -> pathStream
+                    .filter(this::isTranslationFile)
+                    .map(file -> {
+                        final Locale locale = this.extractLocale(file);
+                        final ResourceBundle bundle = ResourceBundle.getBundle("messages", locale, UTF8ResourceBundleControl.get());
+                        return Map.entry(bundle, file);
+                    })
+                    .forEach(entry -> {
+                        this.translationStore.registerAll(entry.getKey().getLocale(), entry.getKey(), true);
+                        this.installedLocales.add(entry.getKey().getLocale());
+                        this.writeUserDirectoryFrom(pluginSource);
+                    }));
+        } catch (final IOException exception) {
+            throw new UncheckedIOException(exception);
+        }
+    }
+
+    private boolean isTranslationFile(final Path targetPath) {
+        return Files.isRegularFile(targetPath) && targetPath.startsWith("messages_") && targetPath.endsWith(".properties");
+    }
+
+    private Locale extractLocale(final Path targetPath) {
+        final String fileName = targetPath.getFileName().toString();
+        final String localeString = fileName.substring("messages_".length()).replace(".properties", "");
+        final Locale locale = Translator.parseLocale(localeString);
+        if (locale == null) {
+            throw new IllegalArgumentException("不明なロケール: %s".formatted(localeString));
+        }
+
+        return locale;
+    }
+
+    private void writeUserDirectoryFrom(final Path sourcePath) {
+        try {
+            MoreFiles.copyFileIfNotExists(sourcePath, this.translationsDirectory);
+        } catch (final IOException exception) {
+            throw new UncheckedIOException(exception);
+        }
+    }
+}

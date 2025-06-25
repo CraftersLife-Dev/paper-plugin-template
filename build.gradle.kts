@@ -1,8 +1,8 @@
 import xyz.jpenilla.resourcefactory.bukkit.Permission
 import xyz.jpenilla.resourcefactory.paper.PaperPluginYaml.Load
 
-group = "com.github.namiuni"
-version = "1.0.0-SNAPSHOT"
+val projectVersion: String by project
+version = projectVersion
 
 plugins {
     id("java")
@@ -22,28 +22,24 @@ dependencies {
     compileOnly("io.papermc.paper:paper-api:1.21.4-R0.1-SNAPSHOT") {
         exclude("net.md-5")
     }
+
+    // Integrations
     compileOnly("io.github.miniplaceholders:miniplaceholders-api:2.3.0") // MiniPlaceholders
 
     // Libraries
-    runtimeDownload("org.spongepowered:configurate-hocon:4.2.0") // config
+    runtimeDownload("org.spongepowered:configurate-yaml:4.2.0") // config
     runtimeDownload("net.kyori:adventure-serializer-configurate4:4.23.0") // config serializer
-    runtimeDownload("net.kyori.moonshine:moonshine-standard:2.0.4") // message
-
-    // Misc
-    runtimeDownload("com.google.inject:guice:7.0.1-SNAPSHOT") {
-        exclude("com.google.guava")
-    }
 }
 
 val mainPackage = "$group.${rootProject.name.lowercase()}"
 paperPluginYaml {
-    author = "Namiu/Unitarou"
-    website = "https://github.com/NamiUni"
+    author = "Namiu/うにたろう"
+    website = "https://github.com/CraftersLife-Dev"
     apiVersion = "1.21"
 
-    main = "$mainPackage.${rootProject.name}" // TODO: check
-    bootstrapper = "$mainPackage.PaperBootstrap" // TODO: change
-    loader = "$mainPackage.PaperPluginLoader" // TODO: change
+    main = "$mainPackage.TemplatePlugin" // TODO: JavaPluginの具象クラス名に変えてね
+    bootstrapper = "$mainPackage.TemplateBootstrap" // TODO: PluginBootstrapの具象クラス名に変えてね
+    loader = "$mainPackage.TemplateLoader" // TODO: PluginLoaderの具象クラス名に変えてね
 
     permissions {
         register("${rootProject.name.lowercase()}.command.reload") {
@@ -54,7 +50,7 @@ paperPluginYaml {
 
     dependencies {
         server("MiniPlaceholders", Load.BEFORE, false)
-        server("LuckPerms", Load.BEFORE, true)
+        server("LuckPerms", Load.BEFORE, false)
     }
 }
 
@@ -83,12 +79,13 @@ tasks {
     }
 
     runServer {
+        // runディレクトリの中にlog4j2.xmlを突っ込むとログの設定を変更可能
+        // Paper: https://github.com/PaperMC/Paper/blob/main/paper-server/src/main/resources/log4j2.xml
         systemProperty("log4j.configurationFile", "log4j2.xml")
-//        systemProperty("com.mojang.eula.agree", "true")
         minecraftVersion("1.21.4")
         downloadPlugins {
-            url("https://download.luckperms.net/1573/bukkit/loader/LuckPerms-Bukkit-5.4.156.jar")
-            modrinth("miniplaceholders", "wck4v0R0") // バージョンに2.3.0を指定すると何故かVelocityのjarがダウンロードされる
+            modrinth("luckperms", "v5.5.0-bukkit")
+            modrinth("miniplaceholders", "wck4v0R0")
             modrinth("miniplaceholders-placeholderapi-expansion", "1.2.0")
             hangar("PlaceholderAPI", "2.11.6")
         }

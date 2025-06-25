@@ -1,7 +1,7 @@
 /*
- * PluginTemplate
+ * PaperTemplate
  *
- * Copyright (c) 2025. Namiu/Unitarou
+ * Copyright (c) 2025. Namiu/うにたろう
  *                     Contributors []
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,7 +17,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package com.github.namiuni.plugintemplate.util;
+package com.github.crafterslife.dev.papertemplate.util;
 
 import org.jspecify.annotations.NullMarked;
 
@@ -62,5 +62,27 @@ public final class MoreFiles {
                 consumer.accept(paths);
             }
         }
+    }
+
+    public static void copyFileIfNotExists(final Path sourcePath, final Path parentDirectory) throws IOException {
+        if (!Files.isRegularFile(sourcePath) && !Files.isDirectory(parentDirectory)) {
+            return;
+        }
+
+        final Path fileName = sourcePath.getFileName();
+        final Path targetPath = parentDirectory.resolve(fileName);
+
+        try {
+            Files.copy(sourcePath, targetPath);
+        } catch (final FileAlreadyExistsException ignore) {
+            // ignore
+        }
+
+//        try (final InputStream inputStream = Files.newInputStream(sourcePath);
+//             final OutputStream outputStream = Files.newOutputStream(parentDirectory)) {
+//            inputStream.transferTo(outputStream);
+//        } catch (final IOException exception) {
+//            throw new UncheckedIOException("Unable to copy file: %s".formatted(sourcePath), exception);
+//        }
     }
 }

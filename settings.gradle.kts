@@ -1,6 +1,6 @@
 @file:Suppress("UnstableApiUsage")
 
-rootProject.name = "PluginTemplate" // TODO: change
+rootProject.name = "PaperTemplate" // TODO: プラグイン名に変えてね
 
 dependencyResolutionManagement {
     repositories {

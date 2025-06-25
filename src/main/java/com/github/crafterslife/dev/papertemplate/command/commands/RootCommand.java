@@ -1,7 +1,7 @@
 /*
- * PluginTemplate
+ * PaperTemplate
  *
- * Copyright (c) 2025. Namiu/Unitarou
+ * Copyright (c) 2025. Namiu/うにたろう
  *                     Contributors []
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,25 +17,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package com.github.namiuni.plugintemplate.command.commands;
+package com.github.crafterslife.dev.papertemplate.command.commands;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
+import io.papermc.paper.command.brigadier.Commands;
 import org.jspecify.annotations.NullMarked;
-
-import java.util.List;
 
 @NullMarked
 @SuppressWarnings("UnstableApiUsage")
-public interface PluginCommand { //TODO change
-
-    LiteralArgumentBuilder<CommandSourceStack> node();
-
-    default List<String> aliases() {
-        return List.of();
-    }
-
-    default String description() {
-        return "A PluginTemplate provided command"; // TODO: change
+public final class RootCommand implements PluginCommand {
+    @Override
+    public LiteralArgumentBuilder<CommandSourceStack> node() {
+        return Commands.literal("plugin"); // TODO: change
     }
 }

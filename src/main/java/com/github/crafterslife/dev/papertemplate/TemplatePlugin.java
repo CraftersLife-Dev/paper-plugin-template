@@ -1,7 +1,7 @@
 /*
- * PluginTemplate
+ * PaperTemplate
  *
- * Copyright (c) 2025. Namiu/Unitarou
+ * Copyright (c) 2025. Namiu/うにたろう
  *                     Contributors []
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,19 +17,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package com.github.namiuni.plugintemplate.configuration;
+package com.github.crafterslife.dev.papertemplate;
 
+import org.bukkit.plugin.java.JavaPlugin;
 import org.jspecify.annotations.NullMarked;
-import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 
 @NullMarked
-@ConfigSerializable
-@SuppressWarnings({"FieldMayBeFinal", "FieldCanBeLocal"})
-public final class PrimaryConfig {
+public final class TemplatePlugin extends JavaPlugin { // TODO: プラグイン名に変えてね
 
-    private String messagePrefix = "<gradient:#090979:#00d4ff>[PluginTemplate]</gradient> "; // TODO change
+    public TemplatePlugin(final TemplateContext templateContext) {
+    }
 
-    public String messagePrefix() {
-        return this.messagePrefix;
+    @Override
+    public void onEnable() {
+//        for (final Listener listener : this.listeners) {
+//            this.getServer().getPluginManager().registerEvents(listener, this);
+//        }
     }
 }

@@ -1,7 +1,7 @@
 /*
- * PluginTemplate
+ * PaperTemplate
  *
- * Copyright (c) 2025. Namiu/Unitarou
+ * Copyright (c) 2025. Namiu/うにたろう
  *                     Contributors []
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,14 +17,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package com.github.namiuni.plugintemplate;
+package com.github.crafterslife.dev.papertemplate;
 
-import com.github.namiuni.plugintemplate.command.CommandManager;
-import com.github.namiuni.plugintemplate.configuration.ConfigurationManager;
-import com.github.namiuni.plugintemplate.translation.TranslationSource;
-import com.google.inject.Guice;
-import com.google.inject.Injector;
-import com.google.inject.Module;
 import io.papermc.paper.plugin.bootstrap.BootstrapContext;
 import io.papermc.paper.plugin.bootstrap.PluginBootstrap;
 import io.papermc.paper.plugin.bootstrap.PluginProviderContext;
@@ -34,22 +28,17 @@ import org.jspecify.annotations.NullMarked;
 
 @NullMarked
 @SuppressWarnings({"UnstableApiUsage", "unused"})
-public final class PaperBootstrap implements PluginBootstrap {
+public final class TemplateBootstrap implements PluginBootstrap {
 
-    private @MonotonicNonNull Injector injector;
+    private @MonotonicNonNull TemplateContext templateContext;
 
     @Override
     public void bootstrap(final BootstrapContext context) {
-        final Module module = new BootstrapModule(context);
-        this.injector = Guice.createInjector(module);
-
-        this.injector.getInstance(ConfigurationManager.class).loadConfigurations();
-        this.injector.getInstance(TranslationSource.class).loadTranslations();
-        this.injector.getInstance(CommandManager.class).register();
+        this.templateContext = new TemplateContext();
     }
 
     @Override
     public JavaPlugin createPlugin(final PluginProviderContext context) {
-        return this.injector.getInstance(JavaPlugin.class);
+        return new TemplatePlugin(this.templateContext);
     }
 }

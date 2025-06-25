@@ -1,7 +1,7 @@
 /*
- * PluginTemplate
+ * PaperTemplate
  *
- * Copyright (c) 2025. Namiu/Unitarou
+ * Copyright (c) 2025. Namiu/うにたろう
  *                     Contributors []
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,11 +17,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package com.github.namiuni.plugintemplate.command;
+package com.github.crafterslife.dev.papertemplate.command;
 
-import com.github.namiuni.plugintemplate.command.commands.PluginCommand;
-import com.github.namiuni.plugintemplate.command.commands.RootCommand;
-import com.google.inject.Inject;
+import com.github.crafterslife.dev.papertemplate.command.commands.PluginCommand;
+import com.github.crafterslife.dev.papertemplate.command.commands.RootCommand;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import io.papermc.paper.plugin.bootstrap.BootstrapContext;
 import io.papermc.paper.plugin.lifecycle.event.LifecycleEventManager;
@@ -37,7 +36,6 @@ public final class CommandManager {
     private final LifecycleEventManager<BootstrapContext> lifecycleEventManager;
     private final Set<PluginCommand> commands;
 
-    @Inject
     private CommandManager(
             final LifecycleEventManager<BootstrapContext> lifecycleEventManager,
             final Set<PluginCommand> commands

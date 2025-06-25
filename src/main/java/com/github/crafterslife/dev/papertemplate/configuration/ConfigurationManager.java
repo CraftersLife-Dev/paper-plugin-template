@@ -1,7 +1,7 @@
 /*
- * PluginTemplate
+ * PaperTemplate
  *
- * Copyright (c) 2025. Namiu/Unitarou
+ * Copyright (c) 2025. Namiu/うにたろう
  *                     Contributors []
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,50 +17,46 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package com.github.namiuni.plugintemplate.configuration;
+package com.github.crafterslife.dev.papertemplate.configuration;
 
-import com.github.namiuni.plugintemplate.DataDirectory;
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
 import net.kyori.adventure.serializer.configurate4.ConfigurateComponentSerializer;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.jspecify.annotations.NullMarked;
 import org.spongepowered.configurate.CommentedConfigurationNode;
 import org.spongepowered.configurate.ConfigurateException;
-import org.spongepowered.configurate.hocon.HoconConfigurationLoader;
 import org.spongepowered.configurate.loader.ConfigurationLoader;
+import org.spongepowered.configurate.yaml.NodeStyle;
+import org.spongepowered.configurate.yaml.YamlConfigurationLoader;
 
 import java.nio.file.Path;
 
-@Singleton
 @NullMarked
 public final class ConfigurationManager {
 
-    private static final String PRIMARY_CONFIG_FILE_NAME = "config.conf";
+    private static final String PRIMARY_CONFIG_FILE_NAME = "config.yml";
 
     private final Path dataDirectory;
     private final ComponentLogger logger;
 
-    private @MonotonicNonNull PrimaryConfig primaryConfig = null;
+    private @MonotonicNonNull PrimaryConfig primaryConfig;
 
-    @Inject
     private ConfigurationManager(
-            final @DataDirectory Path dataDirectory,
+            final Path dataDirectory,
             final ComponentLogger logger
     ) {
         this.dataDirectory = dataDirectory;
         this.logger = logger;
     }
 
-    public void loadConfigurations() {
-        this.logger.info("Loading configurations...");
+    public void reloadConfigurations() {
+        this.logger.info("設定を読み込み中...");
         try {
             this.primaryConfig = this.load(PrimaryConfig.class, PRIMARY_CONFIG_FILE_NAME);
         } catch (final ConfigurateException exception) {
-            throw new UncheckedConfigurateException("Unable to load configurations", exception);
+            throw new UncheckedConfigurateException("設定の読み込みに失敗", exception);
         }
-        this.logger.info("Successfully loaded configurations: {}", PRIMARY_CONFIG_FILE_NAME);
+        this.logger.info("設定の読み込みに成功: {}", PRIMARY_CONFIG_FILE_NAME);
     }
 
     public PrimaryConfig primary() {
@@ -68,8 +64,8 @@ public final class ConfigurationManager {
     }
 
     public ConfigurationLoader<CommentedConfigurationNode> configurationLoader(final Path file) {
-        return HoconConfigurationLoader.builder()
-                .prettyPrinting(true)
+        return YamlConfigurationLoader.builder()
+                .nodeStyle(NodeStyle.BLOCK)
                 .defaultOptions(options -> {
                     final var kyoriSerializer = ConfigurateComponentSerializer.configurate();
                     return options

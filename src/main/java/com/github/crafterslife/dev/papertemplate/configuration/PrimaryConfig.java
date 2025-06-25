@@ -1,7 +1,7 @@
 /*
- * PluginTemplate
+ * PaperTemplate
  *
- * Copyright (c) 2025. Namiu/Unitarou
+ * Copyright (c) 2025. Namiu/うにたろう
  *                     Contributors []
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,20 +17,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package com.github.namiuni.plugintemplate;
+package com.github.crafterslife.dev.papertemplate.configuration;
 
-import jakarta.inject.Qualifier;
+import org.jspecify.annotations.NullMarked;
+import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.Target;
+@NullMarked
+@ConfigSerializable
+@SuppressWarnings({"FieldMayBeFinal", "FieldCanBeLocal"})
+public final class PrimaryConfig {
 
-import static java.lang.annotation.ElementType.FIELD;
-import static java.lang.annotation.ElementType.PARAMETER;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
+    private String messagePrefix = "<gradient:#090979:#00d4ff>[PluginTemplate]</gradient> "; // TODO change
 
-@Qualifier
-@Target({FIELD, PARAMETER})
-@Retention(RUNTIME)
-public @interface PluginSource {
-
+    public String messagePrefix() {
+        return this.messagePrefix;
+    }
 }

@@ -1,7 +1,7 @@
 /*
- * PluginTemplate
+ * PaperTemplate
  *
- * Copyright (c) 2025. Namiu/Unitarou
+ * Copyright (c) 2025. Namiu/うにたろう
  *                     Contributors []
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,19 +17,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package com.github.namiuni.plugintemplate;
+package com.github.crafterslife.dev.papertemplate.message;
 
-import io.papermc.paper.plugin.loader.PluginClasspathBuilder;
-import io.papermc.paper.plugin.loader.PluginLoader;
+import net.kyori.adventure.audience.Audience;
+import net.kyori.adventure.text.Component;
 import org.jspecify.annotations.NullMarked;
-import xyz.jpenilla.gremlin.runtime.platformsupport.DefaultsPaperPluginLoader;
 
 @NullMarked
-@SuppressWarnings({"UnstableApiUsage", "unused"})
-public final class PaperPluginLoader implements PluginLoader {
+public final class TranslationMessages {
 
-    @Override
-    public void classloader(final PluginClasspathBuilder classpathBuilder) {
-        new DefaultsPaperPluginLoader().classloader(classpathBuilder);
+    private TranslationMessages() {
+
+    }
+
+    public static void configReloadSuccess(final Audience audience) {
+        final Component rendered = TranslationRenderer.render("plugintemplate.reload.success", audience); // TODO: keyはプラグイン名に変えてね
+        audience.sendMessage(rendered);
     }
 }

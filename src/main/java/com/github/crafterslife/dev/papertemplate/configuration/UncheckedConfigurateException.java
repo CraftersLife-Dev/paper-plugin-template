@@ -1,7 +1,7 @@
 /*
- * PluginTemplate
+ * PaperTemplate
  *
- * Copyright (c) 2025. Namiu/Unitarou
+ * Copyright (c) 2025. Namiu/うにたろう
  *                     Contributors []
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,7 +17,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package com.github.namiuni.plugintemplate.configuration;
+package com.github.crafterslife.dev.papertemplate.configuration;
 
 import org.jspecify.annotations.NullMarked;
 import org.spongepowered.configurate.ConfigurateException;
@@ -28,7 +28,7 @@ import java.io.Serial;
 @SuppressWarnings("unused")
 public final class UncheckedConfigurateException extends RuntimeException {
     @Serial
-    private static final long serialVersionUID = -2214743499979182898L;
+    private static final long serialVersionUID = -3277407553778580668L;
 
     public UncheckedConfigurateException() {
         super();
