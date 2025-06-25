@@ -19,10 +19,8 @@
  */
 package com.github.crafterslife.dev.papertemplate.configuration;
 
-import org.jspecify.annotations.NullMarked;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 
-@NullMarked
 @ConfigSerializable
 @SuppressWarnings({"FieldMayBeFinal", "FieldCanBeLocal"})
 public final class PrimaryConfig {

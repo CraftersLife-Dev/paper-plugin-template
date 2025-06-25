@@ -25,7 +25,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.jspecify.annotations.NullMarked;
 
-@NullMarked
 public final class TemplateListener implements Listener {
 
     private final TemplateContext context;

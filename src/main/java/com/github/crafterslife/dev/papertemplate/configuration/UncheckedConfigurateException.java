@@ -19,12 +19,10 @@
  */
 package com.github.crafterslife.dev.papertemplate.configuration;
 
-import org.jspecify.annotations.NullMarked;
 import org.spongepowered.configurate.ConfigurateException;
 
 import java.io.Serial;
 
-@NullMarked
 @SuppressWarnings("unused")
 public final class UncheckedConfigurateException extends RuntimeException {
     @Serial

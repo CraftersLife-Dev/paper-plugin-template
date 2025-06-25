@@ -29,12 +29,10 @@ import io.papermc.paper.plugin.bootstrap.PluginProviderContext;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
-import org.jspecify.annotations.NullMarked;
 
 import java.util.Set;
 import java.util.function.Function;
 
-@NullMarked
 @SuppressWarnings({"UnstableApiUsage", "unused"})
 public final class TemplateBootstrap implements PluginBootstrap {
 

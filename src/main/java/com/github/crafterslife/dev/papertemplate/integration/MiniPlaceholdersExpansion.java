@@ -20,9 +20,7 @@
 package com.github.crafterslife.dev.papertemplate.integration;
 
 import org.bukkit.Bukkit;
-import org.jspecify.annotations.NullMarked;
 
-@NullMarked
 public final class MiniPlaceholdersExpansion {
 
 //    private static final String PLUGIN_NAME = "PluginName"; // TODO: プラグイン名に変えてね

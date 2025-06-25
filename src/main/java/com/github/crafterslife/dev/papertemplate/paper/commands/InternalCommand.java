@@ -21,11 +21,9 @@ package com.github.crafterslife.dev.papertemplate.paper.commands;
 
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
-import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
 
-@NullMarked
 @SuppressWarnings("UnstableApiUsage")
 public sealed interface InternalCommand permits AdminCommand {
 

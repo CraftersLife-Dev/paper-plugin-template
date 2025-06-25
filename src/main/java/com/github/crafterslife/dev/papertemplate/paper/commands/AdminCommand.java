@@ -28,9 +28,7 @@ import com.mojang.brigadier.Command;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
-import org.jspecify.annotations.NullMarked;
 
-@NullMarked
 @SuppressWarnings("UnstableApiUsage")
 public final class AdminCommand implements InternalCommand {
 

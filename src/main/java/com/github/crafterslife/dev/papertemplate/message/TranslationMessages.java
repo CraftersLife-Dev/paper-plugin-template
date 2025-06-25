@@ -21,9 +21,7 @@ package com.github.crafterslife.dev.papertemplate.message;
 
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
-import org.jspecify.annotations.NullMarked;
 
-@NullMarked
 public final class TranslationMessages {
 
     private TranslationMessages() {

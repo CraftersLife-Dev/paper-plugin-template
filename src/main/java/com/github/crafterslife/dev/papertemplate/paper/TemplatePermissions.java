@@ -19,9 +19,6 @@
  */
 package com.github.crafterslife.dev.papertemplate.paper;
 
-import org.jspecify.annotations.NullMarked;
-
-@NullMarked
 public final class TemplatePermissions {
 
     private static final String PREFIX = "template."; // TODO: 小文字のプラグイン名+.に書き換えてね

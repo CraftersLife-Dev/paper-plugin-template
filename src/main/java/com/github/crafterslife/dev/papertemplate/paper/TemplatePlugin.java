@@ -22,12 +22,10 @@ package com.github.crafterslife.dev.papertemplate.paper;
 import com.github.crafterslife.dev.papertemplate.paper.listeners.TemplateListener;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.jspecify.annotations.NullMarked;
 
 import java.util.Set;
 import java.util.function.Function;
 
-@NullMarked
 public final class TemplatePlugin extends JavaPlugin { // TODO: プラグイン名に変えてね
 
     private final TemplateContext context;

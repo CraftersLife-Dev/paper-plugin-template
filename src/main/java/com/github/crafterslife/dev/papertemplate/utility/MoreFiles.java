@@ -19,8 +19,6 @@
  */
 package com.github.crafterslife.dev.papertemplate.utility;
 
-import org.jspecify.annotations.NullMarked;
-
 import java.io.IOException;
 import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.FileSystem;
@@ -30,7 +28,6 @@ import java.nio.file.Path;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
-@NullMarked
 public final class MoreFiles {
 
     private MoreFiles() {

@@ -42,7 +42,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-@NullMarked
 public final class TranslationRegistry {
 
     private static final Locale FALLBACK_LOCALE = Locale.JAPANESE;

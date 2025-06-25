@@ -21,10 +21,8 @@ package com.github.crafterslife.dev.papertemplate.paper;
 
 import io.papermc.paper.plugin.loader.PluginClasspathBuilder;
 import io.papermc.paper.plugin.loader.PluginLoader;
-import org.jspecify.annotations.NullMarked;
 import xyz.jpenilla.gremlin.runtime.platformsupport.DefaultsPaperPluginLoader;
 
-@NullMarked
 @SuppressWarnings({"UnstableApiUsage", "unused"})
 public final class TemplateLoader implements PluginLoader {
 
