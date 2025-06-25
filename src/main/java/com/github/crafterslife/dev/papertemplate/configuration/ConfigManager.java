@@ -60,7 +60,7 @@ public final class ConfigManager {
         this.logger.info("設定の読み込みに成功: {}", PRIMARY_CONFIG_FILE_NAME);
     }
 
-    public PrimaryConfig primary() {
+    public PrimaryConfig primaryConfig() {
         return this.primaryConfig;
     }
 
