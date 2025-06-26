@@ -21,16 +21,36 @@ package com.github.crafterslife.dev.papertemplate.configuration;
 
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 
+/**
+ * メイン設定のクラス。
+ *
+ * <p>{@link ConfigSerializable} でマークしているため、
+ * {@link ConfigManager} で設定ファイルへのシリアライズが可能となっている。</p>
+ * <p>WARN: このクラスのインスタンスを取得したい場合は、 {@link ConfigManager#primaryConfig()} からを実行してください。
+ * このクラスのフィールドの値を直接参照してしまうと、config.ymlの値は無視されるため、大変危険です。</p>
+ */
 @ConfigSerializable
 @SuppressWarnings({"FieldMayBeFinal", "FieldCanBeLocal"})
 public final class PrimaryConfig {
 
     private PrimaryConfig() {
-
+        // インスタンスの不用意な生成を防ぐためにprivateで修飾している。
+        // 何がなんでも絶対にpublicにはするな。
     }
-//    private String template = "テスト項目"; TODO: 消してね
-//
-//    public String template() {
-//        return this.template;
-//    }
+
+    /*
+     サンプルコード:
+
+     フィールドとconfig.ymlの項目は1:1の関係
+     private String prefix = "テスト項目"
+
+     呼び出しにはgetterを使用する。
+     public String template() {
+         return this.template;
+     }
+
+     Note: 値を処理してから別な値を返すこともできるが推奨はしない。
+           そうしたい場合は独自のシリアライザーを実装して、それをConfigManager#configurationLoaderで登録する。
+           詳細: https://github.com/SpongePowered/Configurate/wiki/Type-Serializers
+    */
 }

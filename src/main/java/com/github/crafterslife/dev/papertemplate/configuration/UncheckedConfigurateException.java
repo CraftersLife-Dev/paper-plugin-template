@@ -23,8 +23,16 @@ import org.spongepowered.configurate.ConfigurateException;
 
 import java.io.Serial;
 
+/**
+ * {@link ConfigurateException} を {@link RuntimeException} でラップしただけのクラス
+ *
+ * <p>このクラスは、プレイヤーがreloadコマンドを実行して例外が発生した場合に、エラーメッセージをプレイヤーへ送信するために用意してある。</p>
+ * <p>Note: 例外処理を {@link ConfigManager} クラス内で完結してしまうとエラーメッセージをログにしか残せないため、
+ * 例外発生をプレイヤーへ知らせる手段がなくなる。例外をプレイヤーへ知らせないと壊れた設定のままプラグインが動作することに繋がりかねない。</p>
+ */
+// Note: ただのラッパークラスだし誰も使わないと思うので詳細なJavadocは省略
 @SuppressWarnings("unused")
-public final class UncheckedConfigurateException extends RuntimeException {
+final class UncheckedConfigurateException extends RuntimeException {
     @Serial
     private static final long serialVersionUID = -3277407553778580668L;
 

@@ -19,9 +19,15 @@
  */
 package com.github.crafterslife.dev.papertemplate.configuration;
 
+import com.github.crafterslife.dev.papertemplate.minecraft.TemplateBootstrap;
+import com.github.crafterslife.dev.papertemplate.minecraft.TemplateContext;
+import io.papermc.paper.plugin.bootstrap.BootstrapContext;
 import net.kyori.adventure.serializer.configurate4.ConfigurateComponentSerializer;
+import net.kyori.adventure.sound.Sound;
+import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
-import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
+import net.kyori.adventure.text.minimessage.MiniMessage;
+import org.jspecify.annotations.Nullable;
 import org.spongepowered.configurate.CommentedConfigurationNode;
 import org.spongepowered.configurate.ConfigurateException;
 import org.spongepowered.configurate.loader.ConfigurationLoader;
@@ -30,16 +36,41 @@ import org.spongepowered.configurate.yaml.NodeStyle;
 import org.spongepowered.configurate.yaml.YamlConfigurationLoader;
 
 import java.nio.file.Path;
+import java.util.Objects;
 
+/**
+ * 設定ファイルの読み込みと管理を担う。
+ *
+ * <p>プラグインのデータディレクトリ内のYAML設定ファイルを扱い、オブジェクトへのシリアライズおよびデシリアライズをおこなう。</p>
+ * WARN: このクラスのインスタンスは安易に生成しないでください。複数の設定オブジェクトが存在することになるため、大変危険です。
+ * このクラスのインスタンスが必要な場合は、 {@link TemplateBootstrap} のフィールドに代入されている
+ * {@link TemplateContext} のインスタンスから取得できます。
+ * このクラスがシングルトンで設計されていない理由は、テストを容易にするためです。</p>
+ */
+@SuppressWarnings("UnstableApiUsage")
 public final class ConfigManager {
 
     private static final String PRIMARY_CONFIG_FILE_NAME = "config.yml";
+    private static final String PRIMARY_CONFIG_HEADER = """
+            これはPluginTemplateのメイン設定です。
+            設定値を変更する前に、その項目が何をするものなのか必ず確認してください。
+            項目によってはゲームプレイに多大な影響を与えます。
+            """; // TODO: 書き換えてね
 
     private final ComponentLogger logger;
     private final Path dataDirectory;
 
-    private @MonotonicNonNull PrimaryConfig primaryConfig;
+    private @Nullable PrimaryConfig primaryConfig;
 
+    /**
+     * {@code ConfigManager} の新しいインスタンスを生成する。
+     *
+     * <P>WARN: 安易に呼び出さないでください。インスタンスが必要な場合は、 {@link TemplateBootstrap} のフィールドに代入されている
+     * {@link TemplateContext} のインスタンスから取得できます。</P>
+     *
+     * @param logger 設定の読み込み時にメッセージを記録するためのコンポーネントロガー
+     * @param dataDirectory 設定ファイルを保存するデータディレクトリへのパス
+     */
     public ConfigManager(
             final ComponentLogger logger,
             final Path dataDirectory
@@ -48,6 +79,26 @@ public final class ConfigManager {
         this.dataDirectory = dataDirectory;
     }
 
+    /**
+     * プライマリ設定 ({@code config.yml}) のオブジェクトを返す。
+     *
+     * <P>WARN: このメソッドを呼び出すためには、 {@link TemplateBootstrap#loadResources(BootstrapContext)} から
+     * {@link #reloadConfigurations()} が実行されている必要がある。</P>
+     *
+     * @return {@link PrimaryConfig} のインスタンス
+     * @throws NullPointerException 設定がまだ読み込まれていない場合
+     */
+    public PrimaryConfig primaryConfig() {
+        return Objects.requireNonNull(this.primaryConfig, "プライマリ設定がまだ読み込まれていない");
+    }
+
+    /**
+     * すべての設定ファイルを再読み込みする。
+     *
+     * <p>Note: 現在は {@code config.yml} のみが対象。</p>
+     *
+     * @throws UncheckedConfigurateException 設定の読み込みまたは保存中にConfigurateエラーが発生した場合
+     */
     public void reloadConfigurations() {
         this.logger.info("設定を読み込み中...");
         try {
@@ -58,38 +109,69 @@ public final class ConfigManager {
         this.logger.info("設定の読み込みに成功: {}", PRIMARY_CONFIG_FILE_NAME);
     }
 
-    public PrimaryConfig primaryConfig() {
-        return this.primaryConfig;
-    }
+    /**
+     * 指定した名称の設定ファイルを、指定したクラスのオブジェクトへとデシリアライズして返す。
+     *
+     * <p>引数で指定した名称の設定ファイルをプラグインディレクトリから読み込み、引数で指定したクラスのオブジェクトへとデシリアライズして返す。
+     * 設定ファイルが見つからなかった場合は指定したクラスのフィールドのデフォルト値でオブジェクトを生成し、それをシリアライズしてプラグインディレクトリに書き込む。
+     *
+     * @param <T> 設定オブジェクトの型
+     * @param clazz デシリアライズする対象
+     * @param fileName 設定ファイルの名称
+     * @return デシリアライズされたオブジェクト
+     * @throws ConfigurateException 設定の読み込みや保存、あるいはデシリアライズなどによってConfigurateエラーが発生した場合
+     */
+    private <T> T load(final Class<T> clazz, final String fileName) throws ConfigurateException {
+        // データディレクトリパスとfileNameを繋ぎ、新たなファイルパスを生成する。
+        final Path filePath = this.dataDirectory.resolve(fileName);
 
-    public ConfigurationLoader<CommentedConfigurationNode> configurationLoader(final Path file) {
-        return YamlConfigurationLoader.builder()
-                .nodeStyle(NodeStyle.BLOCK)
-                .defaultOptions(options -> {
-                    final var kyoriSerializer = ConfigurateComponentSerializer.configurate();
-                    return options
-                            .shouldCopyDefaults(true)
-                            .serializers(serializerBuilder -> serializerBuilder
-                                    .registerAll(kyoriSerializer.serializers()));
-                })
-                .headerMode(HeaderMode.PRESET)
-                .path(file)
-                .build();
-    }
-
-    public <T> T load(final Class<T> clazz, final String fileName) throws ConfigurateException {
-        final Path file = this.dataDirectory.resolve(fileName);
-        final ConfigurationLoader<CommentedConfigurationNode> loader = this.configurationLoader(file);
-
-        final CommentedConfigurationNode node = loader.load();
-        final T config = node.get(clazz);
+        // ローダーを生成して、設定ファイルをオブジェクトへとデシリアライズする。
+        // 設定ファイルがファイルパスに存在しなかった場合は、clazzのオブジェクトが直接生成される。
+        final ConfigurationLoader<CommentedConfigurationNode> loader = this.configurationLoader(filePath);
+        final CommentedConfigurationNode root = loader.load(); // ルートとなるノード
+        final T config = root.get(clazz);
         if (config == null) {
-            throw new ConfigurateException(node, "Failed to deserialize " + clazz.getName() + " from node");
+            throw new ConfigurateException(root, "デシリアライズに失敗: %s".formatted(clazz.getName()));
         }
 
-        node.set(clazz, config);
-        loader.save(node);
+        // ローダーを使用して、設定オブジェクトを設定ファイルにシリアライズしてからfilePathへ書き込む。
+        loader.save(root);
 
         return config;
+    }
+
+    /**
+     * 指定されたファイルパスに対して、 {@link YamlConfigurationLoader} を作成して返す。
+     *
+     * <p>このローダーは、ブロックノードスタイルでyamlファイルを処理する。
+     * ローダーが担うシリアライズやデシリアライズは、プリミティブ型に加えていくつかの参照型を標準でサポートしている。</p>
+     * <p>また、Adventureのシリアライザーをこのメソッドで登録するため、 {@link Component} や {@link Sound} などのデータ型もシリアライズできるようになっている。</p>
+     *
+     * @param filePath ローダーが設定を処理するファイルへのパス
+     * @return 指定されたファイル用の {@link ConfigurationLoader} インスタンス
+     * @see <a href="https://github.com/SpongePowered/Configurate/wiki/Type-Serializers">Type Serializers</a>
+     * @see <a href="https://github.com/KyoriPowered/adventure/tree/main/4/serializer-configurate4/src/main/java/net/kyori/adventure/serializer/configurate4">Adventure Serializers</a>
+     */
+    // 独自のシリアライザーを登録したい場合は、ConfigurateWikiのTypeSerializerを参照
+    // https://github.com/SpongePowered/Configurate/wiki/Type-Serializers
+    private ConfigurationLoader<CommentedConfigurationNode> configurationLoader(final Path filePath) {
+
+        // Adventureシリアライザー
+        final var adventureSerializer = ConfigurateComponentSerializer.builder()
+                .scalarSerializer(MiniMessage.miniMessage()) // 設定クラスの型にComponentを使用する場合はMiniMessage形式で設定ファイルへ出力
+                .outputStringComponents(true)
+                .build()
+                .serializers();
+
+        // ローダーをビルドして返す
+        return YamlConfigurationLoader.builder()
+                .nodeStyle(NodeStyle.BLOCK) // yamlファイルにはブロックノードを使用
+                .headerMode(HeaderMode.PRESET)
+                .defaultOptions(options -> options
+                        .shouldCopyDefaults(true)
+                        .header(PRIMARY_CONFIG_HEADER) // ヘッダーの内容を指定
+                        .serializers(builder -> builder.registerAll(adventureSerializer)))
+                .path(filePath)
+                .build();
     }
 }
