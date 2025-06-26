@@ -48,7 +48,7 @@ import java.util.stream.Stream;
  * 翻訳可能なシステムメッセージの管理を担う。
  *
  * <p>このクラスは、翻訳可能なシステムメッセージの読み込みや、メッセージファイルの書き込みをおこなう。</p>
- * Note: このクラスのインスタンスが必要な場合は、 {@link TemplateContext#translationManager()} から取得する。</p>
+ * <p>Note: このクラスのインスタンスが必要な場合は、 {@link TemplateContext#translationManager()} から取得する。</p>
  */
 // このクラスをシングルトンで設計しなかった理由は、テストを容易にするため
 @SuppressWarnings("UnstableApiUsage")
