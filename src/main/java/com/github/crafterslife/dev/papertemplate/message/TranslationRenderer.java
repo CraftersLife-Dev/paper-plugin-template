@@ -20,7 +20,6 @@
 package com.github.crafterslife.dev.papertemplate.message;
 
 import com.github.crafterslife.dev.papertemplate.integration.MiniPlaceholdersExpansion;
-import io.github.miniplaceholders.api.MiniPlaceholders;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.ComponentLike;
