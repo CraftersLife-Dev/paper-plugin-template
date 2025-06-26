@@ -19,28 +19,72 @@
  */
 package com.github.crafterslife.dev.papertemplate.integration;
 
-import org.bukkit.Bukkit;
+import io.github.miniplaceholders.api.MiniPlaceholders;
+import net.kyori.adventure.audience.Audience;
+import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 
+import java.util.Objects;
+
+/**
+ * MiniPlaceholdersプラグインのAPIを利用するためのラッパークラス。
+ *
+ * <p>このクラスは、 {@link MiniPlaceholders} に破壊的な変更が加えられた場合でも、
+ * 柔軟に対応するためのラッパークラスである。</p>
+ */
 public final class MiniPlaceholdersExpansion {
 
-//    private static final String PLUGIN_NAME = "PluginName"; // TODO: プラグイン名に変えてね
+    private static byte miniPlaceholdersLoaded = -1;
 
     public MiniPlaceholdersExpansion() {
     }
 
-    public static boolean miniPlaceholdersLoaded() {
-        return Bukkit.getPluginManager().isPluginEnabled("MiniPlaceholders");
+    /**
+     * MiniPlaceholdersが読み込まれているかどうかを確認する。
+     *
+     * @return MiniMessageが読み込まれていればtrue
+     */
+    private static boolean miniPlaceholdersLoaded() {
+        if (miniPlaceholdersLoaded == -1) {
+            try {
+                final String name = MiniPlaceholders.class.getName();
+                Objects.requireNonNull(name);
+                miniPlaceholdersLoaded = 1;
+            } catch (final NoClassDefFoundError error) {
+                miniPlaceholdersLoaded = 0;
+            }
+        }
+        return miniPlaceholdersLoaded == 1;
     }
 
-/*
-    public void registerExpansion() {
-        final var expansion = Expansion.builder(PLUGIN_NAME)
-                    .audiencePlaceholder("your_audience_placeholder", (audience, queue, ctx) ->
-                            Tag.selfClosingInserting())
-                    .globalPlaceholder("your_global_placeholder", ((argumentQueue, context) ->
-                            Tag.selfClosingInserting(Component.empty())))
-                .build();
-        expansion.register();
+    /**
+     * グローバル・プレースホルダーに基づいてTagResolverを取得する。
+     *
+     * <p>MiniPlaceholdersが読み込まれている場合はグローバル・プレースホルダーを返すが、
+     * 読み込まれていない場合は空っぽのTagResolverを返す。</p>
+     *
+     * @return グローバル・プレースホルダーに基づいたTagResolver
+     */
+    public static TagResolver globalPlaceholders() {
+        if (MiniPlaceholdersExpansion.miniPlaceholdersLoaded()) {
+            return MiniPlaceholders.getGlobalPlaceholders();
+        }
+
+        return TagResolver.empty();
     }
-*/
+
+    /**
+     * オーディエンス、およびグローバルのプレースホルダーに基づいてTagResolverを取得する。
+     *
+     * <p>MiniPlaceholdersが読み込まれている場合は、オーディエンス、およびグローバルのプレースホルダーを返すが、
+     * 読み込まれていない場合は空っぽのTagResolverを返す。</p>
+     *
+     * @return オーディエンス、およびグローバルのプレースホルダーに基づいたTagResolver
+     */
+    public static TagResolver audiencePlaceholders(final Audience audience) {
+        if (MiniPlaceholdersExpansion.miniPlaceholdersLoaded()) {
+            return MiniPlaceholders.getAudienceGlobalPlaceholders(audience);
+        }
+
+        return TagResolver.empty();
+    }
 }
