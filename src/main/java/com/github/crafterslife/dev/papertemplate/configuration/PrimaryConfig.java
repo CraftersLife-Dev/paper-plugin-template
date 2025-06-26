@@ -24,6 +24,10 @@ import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 @ConfigSerializable
 @SuppressWarnings({"FieldMayBeFinal", "FieldCanBeLocal"})
 public final class PrimaryConfig {
+
+    private PrimaryConfig() {
+
+    }
 //    private String template = "テスト項目"; TODO: 消してね
 //
 //    public String template() {
