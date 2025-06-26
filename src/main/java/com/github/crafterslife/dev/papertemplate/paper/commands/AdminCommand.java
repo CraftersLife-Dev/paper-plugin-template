@@ -23,7 +23,7 @@ import com.github.crafterslife.dev.papertemplate.paper.TemplateContext;
 import com.github.crafterslife.dev.papertemplate.paper.TemplatePermissions;
 import com.github.crafterslife.dev.papertemplate.configuration.ConfigManager;
 import com.github.crafterslife.dev.papertemplate.message.TranslationMessages;
-import com.github.crafterslife.dev.papertemplate.message.TranslationRegistry;
+import com.github.crafterslife.dev.papertemplate.message.TranslationManager;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
@@ -32,28 +32,42 @@ import io.papermc.paper.command.brigadier.Commands;
 @SuppressWarnings("UnstableApiUsage")
 public final class AdminCommand implements InternalCommand {
 
+    private final String pluginName;
     private final ConfigManager configManager;
-    private final TranslationRegistry translationRegistry;
+    private final TranslationManager translationManager;
 
     public AdminCommand(final TemplateContext context) {
+        this.pluginName = context.pluginContext().getConfiguration().getName();
         this.configManager = context.configManager();
-        this.translationRegistry = context.translationRegistry();
+        this.translationManager = context.translationManager();
     }
 
+    // Admin用のコマンドはここに集約
     @Override
     public LiteralCommandNode<CommandSourceStack> create() {
+
+        // ルートコマンド
+        final var root = Commands.literal(this.pluginName.toLowerCase())
+                .requires(context -> context.getSender().hasPermission(TemplatePermissions.COMMAND_ADMIN));
+
+        // リロードコマンド
         final var reload = Commands.literal("reload")
                 .requires(context -> context.getSender().hasPermission(TemplatePermissions.COMMAND_ADMIN_RELOAD))
                 .executes(context -> {
                     this.configManager.reloadConfigurations();
-                    this.translationRegistry.reloadTranslations();
+                    this.translationManager.reloadTranslations();
                     TranslationMessages.configReloadSuccess(context.getSource().getSender());
                     return Command.SINGLE_SUCCESS;
                 });
 
-        return Commands.literal("template") // TODO: 小文字のプラグイン名に変えてね。
-                .requires(context -> context.getSender().hasPermission(TemplatePermissions.COMMAND_ADMIN))
+        // コマンド合体 DXアドミンコマンドオー
+        return root
                 .then(reload)
                 .build();
+    }
+
+    @Override
+    public String description() {
+        return "A %s provided admin command".formatted(this.pluginName);
     }
 }

@@ -26,12 +26,12 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.util.Set;
 import java.util.function.Function;
 
-public final class TemplatePlugin extends JavaPlugin { // TODO: プラグイン名に変えてね
+public final class TemplatePlugin extends JavaPlugin { // TODO: 書き換えてね
 
     private final TemplateContext context;
     private final Set<Function<TemplateContext, Listener>> listenerFactories;
 
-    public TemplatePlugin(final TemplateContext context) {
+    TemplatePlugin(final TemplateContext context) {
         this.context = context;
         this.listenerFactories = Set.of(
                 ExampleListener::new

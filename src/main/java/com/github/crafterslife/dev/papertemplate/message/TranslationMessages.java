@@ -22,14 +22,23 @@ package com.github.crafterslife.dev.papertemplate.message;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 
+/**
+ * このプラグインで使用するシステムメッセージの集合体。
+ */
+// Note: プレフィックスなどを使用してキーを記述すると、リソースバンドルとのリンクが切れてしまうので注意が必要
 public final class TranslationMessages {
 
     private TranslationMessages() {
 
     }
 
+    /**
+     * 設定の再読み込み成功メッセージを送信する。
+     *
+     * @param audience 受信するオーディエンス
+     */
     public static void configReloadSuccess(final Audience audience) {
-        final Component rendered = TranslationRenderer.render("plugintemplate.reload.success", audience); // TODO: keyはプラグイン名に変えてね
+        final Component rendered = TranslationRenderer.render("papertemplate.reload.success", audience); // TODO: キーは書き換えてね
         audience.sendMessage(rendered);
     }
 }

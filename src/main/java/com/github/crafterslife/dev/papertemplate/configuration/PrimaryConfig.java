@@ -22,12 +22,11 @@ package com.github.crafterslife.dev.papertemplate.configuration;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 
 /**
- * メイン設定のクラス。
+ * {@code config.yml} にシリアライズ、およびデシリアライズするための雛形。
  *
- * <p>{@link ConfigSerializable} でマークしているため、
- * {@link ConfigManager} で設定ファイルへのシリアライズが可能となっている。</p>
- * <p>WARN: このクラスのインスタンスを取得したい場合は、 {@link ConfigManager#primaryConfig()} からを実行してください。
- * このクラスのフィールドの値を直接参照してしまうと、config.ymlの値は無視されるため、大変危険です。</p>
+ * <p>このクラスは、 {@link ConfigManager} にて {@code config.yml} へとシリアライズ (逆となるデシリアライズ) するための雛形である。</p>
+ * <p>WARN: このクラスのインスタンスを取得したい場合は、 {@link ConfigManager#primaryConfig()} を呼び出してください。
+ * このクラスのフィールドの値を直接参照してしまうと、 {@code config.yml} の設定値は無視されます。</p>
  */
 @ConfigSerializable
 @SuppressWarnings({"FieldMayBeFinal", "FieldCanBeLocal"})

@@ -33,7 +33,7 @@ public final class ExampleListener implements Listener {
     }
 
     @EventHandler
-    private void onInteracted(final PlayerInteractEvent event) {
+    private void onInteract(final PlayerInteractEvent event) {
 
     }
 }

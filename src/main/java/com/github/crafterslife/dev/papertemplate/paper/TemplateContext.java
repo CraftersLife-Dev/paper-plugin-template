@@ -20,9 +20,17 @@
 package com.github.crafterslife.dev.papertemplate.paper;
 
 import com.github.crafterslife.dev.papertemplate.configuration.ConfigManager;
-import com.github.crafterslife.dev.papertemplate.message.TranslationRegistry;
-import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
+import com.github.crafterslife.dev.papertemplate.message.TranslationManager;
+import io.papermc.paper.plugin.bootstrap.PluginProviderContext;
 
-public record TemplateContext(ComponentLogger logger, ConfigManager configManager, TranslationRegistry translationRegistry) {
+/**
+ * このプラグインのリソースをまとめたコンテナ
+ *
+ * @param pluginContext プラグインのメタ情報
+ * @param configManager 設定管理
+ * @param translationManager 翻訳管理
+ */
+@SuppressWarnings("UnstableApiUsage")
+public record TemplateContext(PluginProviderContext pluginContext, ConfigManager configManager, TranslationManager translationManager) { // TODO: 書き換えてね
 
 }

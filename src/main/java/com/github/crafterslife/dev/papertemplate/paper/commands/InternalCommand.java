@@ -24,15 +24,33 @@ import io.papermc.paper.command.brigadier.CommandSourceStack;
 
 import java.util.List;
 
+/**
+ * Brigadierサポートのカスタムコマンドを作成するためのインターフェース。
+ */
 @SuppressWarnings("UnstableApiUsage")
 public sealed interface InternalCommand permits AdminCommand {
 
+    /**
+     * コマンドを作成する。
+     *
+     * @return 生成したコマンド
+     */
     LiteralCommandNode<CommandSourceStack> create();
 
+    /**
+     * コマンドの説明文を定義する。
+     *
+     * @return コマンドの説明文
+     */
     default String description() {
-        return "A PluginTemplate provided command"; // TODO: 書き換えてね
+        return "";
     }
 
+    /**
+     * コマンドのエイリアスを定義する。
+     *
+     * @return コマンドのエイリアス
+     */
     default List<String> aliases() {
         return List.of();
     }

@@ -39,51 +39,40 @@ import java.nio.file.Path;
 import java.util.Objects;
 
 /**
- * 設定ファイルの読み込みと管理を担う。
+ * 設定ファイルの読み込みや、設定オブジェクトの管理を担う。
  *
- * <p>プラグインのデータディレクトリ内のYAML設定ファイルを扱い、オブジェクトへのシリアライズおよびデシリアライズをおこなう。</p>
- * WARN: このクラスのインスタンスは安易に生成しないでください。複数の設定オブジェクトが存在することになるため、大変危険です。
- * このクラスのインスタンスが必要な場合は、 {@link TemplateBootstrap} のフィールドに代入されている
- * {@link TemplateContext} のインスタンスから取得できます。
- * このクラスがシングルトンで設計されていない理由は、テストを容易にするためです。</p>
+ * <p>このクラスはプラグインのデータディレクトリ内のYAML設定ファイルを扱い、オブジェクトへのシリアライズおよびデシリアライズをおこなう。</p>
+ * WARN: このクラスのインスタンスは安易に生成しない。複数の設定オブジェクトが存在する危険な状態になる。
+ * このクラスのインスタンスが必要な場合は、 {@link TemplateContext#configManager()} から取得する。</P>
  */
+// このクラスをシングルトンで設計しなかった理由は、テストを容易にするため
 @SuppressWarnings("UnstableApiUsage")
 public final class ConfigManager {
 
     private static final String PRIMARY_CONFIG_FILE_NAME = "config.yml";
     private static final String PRIMARY_CONFIG_HEADER = """
-            これはPluginTemplateのメイン設定です。
-            設定値を変更する前に、その項目が何をするものなのか必ず確認してください。
+            PluginTemplateのメイン設定です。
+            値を変更する前に、その項目が何をするものなのか必ず確認してください。
             項目によってはゲームプレイに多大な影響を与えます。
             """; // TODO: 書き換えてね
 
     private final ComponentLogger logger;
     private final Path dataDirectory;
 
-    private @Nullable PrimaryConfig primaryConfig;
+    private @Nullable PrimaryConfig primaryConfig; // config.yml
 
     /**
-     * {@code ConfigManager} の新しいインスタンスを生成する。
+     * 頼むからこれは呼び出さないでくれ。
      *
-     * <P>WARN: 安易に呼び出さないでください。インスタンスが必要な場合は、 {@link TemplateBootstrap} のフィールドに代入されている
-     * {@link TemplateContext} のインスタンスから取得できます。</P>
-     *
-     * @param logger 設定の読み込み時にメッセージを記録するためのコンポーネントロガー
-     * @param dataDirectory 設定ファイルを保存するデータディレクトリへのパス
+     * @param context ブートストラップコンテキスト
      */
-    public ConfigManager(
-            final ComponentLogger logger,
-            final Path dataDirectory
-    ) {
-        this.logger = logger;
-        this.dataDirectory = dataDirectory;
+    public ConfigManager(final BootstrapContext context) {
+        this.logger = context.getLogger();
+        this.dataDirectory = context.getDataDirectory();
     }
 
     /**
      * プライマリ設定 ({@code config.yml}) のオブジェクトを返す。
-     *
-     * <P>WARN: このメソッドを呼び出すためには、 {@link TemplateBootstrap#loadResources(BootstrapContext)} から
-     * {@link #reloadConfigurations()} が実行されている必要がある。</P>
      *
      * @return {@link PrimaryConfig} のインスタンス
      * @throws NullPointerException 設定がまだ読み込まれていない場合
@@ -102,7 +91,7 @@ public final class ConfigManager {
     public void reloadConfigurations() {
         this.logger.info("設定を読み込み中...");
         try {
-            this.primaryConfig = this.load(PrimaryConfig.class, PRIMARY_CONFIG_FILE_NAME);
+            this.primaryConfig = this.load(PrimaryConfig.class, PRIMARY_CONFIG_FILE_NAME, PRIMARY_CONFIG_HEADER);
         } catch (final ConfigurateException exception) {
             throw new UncheckedConfigurateException("設定の読み込みに失敗", exception);
         }
@@ -110,7 +99,7 @@ public final class ConfigManager {
     }
 
     /**
-     * 指定した名称の設定ファイルを、指定したクラスのオブジェクトへとデシリアライズして返す。
+     * 設定ファイルをオブジェクトへとデシリアライズして返す。
      *
      * <p>引数で指定した名称の設定ファイルをプラグインディレクトリから読み込み、引数で指定したクラスのオブジェクトへとデシリアライズして返す。
      * 設定ファイルが見つからなかった場合は指定したクラスのフィールドのデフォルト値でオブジェクトを生成し、それをシリアライズしてプラグインディレクトリに書き込む。
@@ -121,13 +110,13 @@ public final class ConfigManager {
      * @return デシリアライズされたオブジェクト
      * @throws ConfigurateException 設定の読み込みや保存、あるいはデシリアライズなどによってConfigurateエラーが発生した場合
      */
-    private <T> T load(final Class<T> clazz, final String fileName) throws ConfigurateException {
+    private <T> T load(final Class<T> clazz, final String fileName, String header) throws ConfigurateException {
         // データディレクトリパスとfileNameを繋ぎ、新たなファイルパスを生成する。
         final Path filePath = this.dataDirectory.resolve(fileName);
 
         // ローダーを生成して、設定ファイルをオブジェクトへとデシリアライズする。
         // 設定ファイルがファイルパスに存在しなかった場合は、clazzのオブジェクトが直接生成される。
-        final ConfigurationLoader<CommentedConfigurationNode> loader = this.configurationLoader(filePath);
+        final ConfigurationLoader<CommentedConfigurationNode> loader = this.configurationLoader(filePath, header);
         final CommentedConfigurationNode root = loader.load(); // ルートとなるノード
         final T config = root.get(clazz);
         if (config == null) {
@@ -141,20 +130,20 @@ public final class ConfigManager {
     }
 
     /**
-     * 指定されたファイルパスに対して、 {@link YamlConfigurationLoader} を作成して返す。
+     * ファイルパスを元に {@link YamlConfigurationLoader} を作成して返す。
      *
-     * <p>このローダーは、ブロックノードスタイルでyamlファイルを処理する。
+     * <p>このローダーは、ブロックノードスタイルでYamlを処理する。
      * ローダーが担うシリアライズやデシリアライズは、プリミティブ型に加えていくつかの参照型を標準でサポートしている。</p>
-     * <p>また、Adventureのシリアライザーをこのメソッドで登録するため、 {@link Component} や {@link Sound} などのデータ型もシリアライズできるようになっている。</p>
+     * <p>また、Adventureのシリアライザーもサポートしているため、 {@link Component} や {@link Sound} などのデータ型もシリアライズ可能。</p>
      *
      * @param filePath ローダーが設定を処理するファイルへのパス
      * @return 指定されたファイル用の {@link ConfigurationLoader} インスタンス
      * @see <a href="https://github.com/SpongePowered/Configurate/wiki/Type-Serializers">Type Serializers</a>
      * @see <a href="https://github.com/KyoriPowered/adventure/tree/main/4/serializer-configurate4/src/main/java/net/kyori/adventure/serializer/configurate4">Adventure Serializers</a>
      */
-    // 独自のシリアライザーを登録したい場合は、ConfigurateWikiのTypeSerializerを参照
+    // 独自のシリアライザーを登録したい場合は以下を参照
     // https://github.com/SpongePowered/Configurate/wiki/Type-Serializers
-    private ConfigurationLoader<CommentedConfigurationNode> configurationLoader(final Path filePath) {
+    private ConfigurationLoader<CommentedConfigurationNode> configurationLoader(final Path filePath, final String header) {
 
         // Adventureシリアライザー
         final var adventureSerializer = ConfigurateComponentSerializer.builder()
@@ -165,12 +154,12 @@ public final class ConfigManager {
 
         // ローダーをビルドして返す
         return YamlConfigurationLoader.builder()
-                .nodeStyle(NodeStyle.BLOCK) // yamlファイルにはブロックノードを使用
+                .nodeStyle(NodeStyle.BLOCK)
                 .headerMode(HeaderMode.PRESET)
                 .defaultOptions(options -> options
                         .shouldCopyDefaults(true)
-                        .header(PRIMARY_CONFIG_HEADER) // ヘッダーの内容を指定
-                        .serializers(builder -> builder.registerAll(adventureSerializer)))
+                        .header(header)
+                        .serializers(builder -> builder.registerAll(adventureSerializer))) // Adventureのシリアライザーを登録
                 .path(filePath)
                 .build();
     }

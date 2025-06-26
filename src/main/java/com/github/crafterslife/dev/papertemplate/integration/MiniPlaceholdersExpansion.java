@@ -26,7 +26,7 @@ import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import java.util.Objects;
 
 /**
- * MiniPlaceholdersプラグインのAPIを利用するためのラッパークラス。
+ * MiniPlaceholdersのAPIを集約。
  *
  * <p>このクラスは、 {@link MiniPlaceholders} に破壊的な変更が加えられた場合でも、
  * 柔軟に対応するためのラッパークラスである。</p>
@@ -36,6 +36,7 @@ public final class MiniPlaceholdersExpansion {
     private static byte miniPlaceholdersLoaded = -1;
 
     public MiniPlaceholdersExpansion() {
+
     }
 
     /**

@@ -9,7 +9,7 @@ public class ExampleEvent extends Event {
     private static final HandlerList HANDLER_LIST = new HandlerList();
     private Component message;
 
-    public ExampleEvent(Component message) {
+    public ExampleEvent(final Component message) {
         this.message = message;
     }
 

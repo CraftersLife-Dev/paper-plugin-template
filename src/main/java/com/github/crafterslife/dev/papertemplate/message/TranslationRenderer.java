@@ -24,21 +24,25 @@ import io.github.miniplaceholders.api.MiniPlaceholders;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.ComponentLike;
+import net.kyori.adventure.text.TranslatableComponent;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.minimessage.tag.Tag;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import net.kyori.adventure.text.minimessage.translation.Argument;
 import org.jspecify.annotations.Nullable;
 
+/**
+ *  翻訳メッセージのレンダリングを担う。
+ */
 final class TranslationRenderer {
 
-    private static final TagResolver TAG_RESOLVER;
+    private static final TagResolver JIS_SAFETY_COLOR_RESOLVER; // JIS安全色に則ったタグのコレクション
 
     static {
         final TagResolver.Builder tagBuilder = TagResolver
                 .builder()
                 .resolver(TagResolver.standard());
-
+        
         // JIS安全色: https://ja.wikipedia.org/wiki/JIS%E5%AE%89%E5%85%A8%E8%89%B2
         final TextColor red = TextColor.color(Integer.parseInt("ff4b00", 16));
         final TextColor orange = TextColor.color(Integer.parseInt("f6aa00", 16));
@@ -53,37 +57,55 @@ final class TranslationRenderer {
                 .tag("info", Tag.styling(green))
                 .tag("debug", Tag.styling(blue));
 
-        TAG_RESOLVER = tagBuilder.build();
+        JIS_SAFETY_COLOR_RESOLVER = tagBuilder.build();
     }
 
     private TranslationRenderer() {
 
     }
 
-    public static Component render(final String key, final TagResolver... tagResolvers) {
+    /**
+     * タグリゾルバーを解決し、キーに対応した {@code TranslatableComponent} を生成する。
+     *
+     * @param key メッセージのキー
+     * @param tagResolvers プレースホルダーのコレクション
+     * @return 翻訳可能なコンポーネント
+     */
+    public static TranslatableComponent render(final String key, final TagResolver... tagResolvers) {
         return TranslationRenderer.render(key, null, tagResolvers);
     }
 
-    public static Component render(final String key, final @Nullable Audience audience, final TagResolver... tagResolvers) {
+    /**
+     * タグリゾルバーを解決し、キーに対応した {@code TranslatableComponent} を生成する。
+     *
+     * @param key メッセージのキー
+     * @param audience プレースホルダーを解決するオーディエンス
+     * @param tagResolvers プレースホルダーのコレクション
+     * @return 翻訳可能なコンポーネント
+     */
+    public static TranslatableComponent render(final String key, final @Nullable Audience audience, final TagResolver... tagResolvers) {
         final ComponentLike argument = TranslationRenderer.placeholderResolver(audience, tagResolvers);
         return Component.translatable(key, argument);
     }
 
+    /**
+     * {@code TranslatableComponent} のデシリアライズ処理に追加するための引数を生成する。
+     *
+     * @param audience プレースホルダーを解決するオーディエンス
+     * @param tagResolver プレースホルダーのコレクション
+     * @return デシリアライズ処理に追加するための引数
+     */
     private static ComponentLike placeholderResolver(final @Nullable Audience audience, final TagResolver... tagResolver) {
-        final TagResolver.Builder tagBuilder = TagResolver.builder();
 
-        tagBuilder
-                .resolver(TAG_RESOLVER)
-                .resolvers(tagResolver);
+        // タグリゾルバーをBuilderパターンで構築
+        final TagResolver.Builder tagBuilder = TagResolver.builder()
+                .resolver(JIS_SAFETY_COLOR_RESOLVER) // JIS安全色
+                .resolvers(tagResolver) // プレースホルダー
+                .resolvers(audience != null
+                        ? MiniPlaceholdersExpansion.audiencePlaceholders(audience) // オーディエンスプレースホルダー
+                        : MiniPlaceholdersExpansion.globalPlaceholders()); // グローバルプレースホルダー
 
-        if (MiniPlaceholdersExpansion.miniPlaceholdersLoaded()) {
-            tagBuilder.resolver(MiniPlaceholders.getGlobalPlaceholders());
-
-            if (audience != null) {
-                tagBuilder.resolver(MiniPlaceholders.getAudiencePlaceholders(audience));
-            }
-        }
-
+        // Argumentで返す
         return Argument.tagResolver(tagBuilder.build());
     }
 }

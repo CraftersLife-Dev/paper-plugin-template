@@ -19,13 +19,13 @@
  */
 package com.github.crafterslife.dev.papertemplate.paper;
 
-public final class TemplatePermissions {
-
-    private static final String PREFIX = "template."; // TODO: 小文字のプラグイン名+.に書き換えてね
+public final class TemplatePermissions { // TODO: 書き換えてね
 
     private TemplatePermissions() {
 
     }
+
+    private static final String PREFIX = "template."; // TODO: 小文字のプラグイン名+.に書き換えてね
 
     public static final String COMMAND_ADMIN = PREFIX + "command.admin";
     public static final String COMMAND_ADMIN_RELOAD = COMMAND_ADMIN + ".reload";

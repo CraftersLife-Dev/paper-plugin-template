@@ -28,12 +28,21 @@ import java.nio.file.Path;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
+/**
+ * Files関係のユーティリティの集合体。
+ */
 public final class MoreFiles {
 
     private MoreFiles() {
 
     }
 
+    /**
+     * ディレクトリが存在しなければ生成する。
+     *
+     * @param path 生成するディレクトリ
+     * @throws IOException ディレクトリが生成できなかった場合
+     */
     public static void createDirectoriesIfNotExists(final Path path) throws IOException {
         if (Files.exists(path) && (Files.isDirectory(path) || Files.isSymbolicLink(path))) {
             return;
@@ -46,16 +55,26 @@ public final class MoreFiles {
         }
     }
 
-    public static void walkAsDirectory(final Path path, final Consumer<Stream<Path>> consumer) throws IOException {
-        if (Files.isDirectory(path)) {
-            try (final Stream<Path> paths = Files.walk(path)) {
+    /**
+     * アーカイブファイルでもディレクトリのように走査する。
+     *
+     * @param archivePath 対象のアーカイブファイル
+     * @param consumer ストリームのコンシューマー
+     * @throws IOException ディレクトリを走査できなかった場合
+     */
+    public static void walkAsDirectory(final Path archivePath, final Consumer<Stream<Path>> consumer) throws IOException {
+
+        // ディレクトリだった場合は普通に走査
+        if (Files.isDirectory(archivePath)) {
+            try (final Stream<Path> paths = Files.walk(archivePath)) {
                 consumer.accept(paths);
             }
         }
 
-        try (final FileSystem archiveFile = FileSystems.newFileSystem(path, MoreFiles.class.getClassLoader())) {
-            final Path archivePath = archiveFile.getRootDirectories().iterator().next();
-            try (final Stream<Path> paths = Files.walk(archivePath)) {
+        // アーカイブファイルだった場合は裏技使って走査
+        try (final FileSystem archiveFile = FileSystems.newFileSystem(archivePath, MoreFiles.class.getClassLoader())) {
+            final Path rootPath = archiveFile.getRootDirectories().iterator().next();
+            try (final Stream<Path> paths = Files.walk(rootPath)) {
                 consumer.accept(paths);
             }
         }
