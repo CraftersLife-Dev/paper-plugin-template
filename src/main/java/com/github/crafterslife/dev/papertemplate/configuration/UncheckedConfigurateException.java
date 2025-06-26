@@ -24,9 +24,10 @@ import org.spongepowered.configurate.ConfigurateException;
 import java.io.Serial;
 
 /**
- * {@link ConfigurateException} を {@link RuntimeException} でラップしただけのクラス
+ * 設定関連の例外を扱う。
  *
- * <p>このクラスは、プレイヤーがreloadコマンドを実行して例外が発生した場合に、エラーメッセージをプレイヤーへ送信するために用意してある。</p>
+ * <p>このクラスは、{@link ConfigurateException} を {@link RuntimeException} でラップしただけのクラスである。
+ * プレイヤーがreloadコマンドを実行して例外が発生した場合に、エラーメッセージをプレイヤーへ送信するためのもの。</p>
  * <p>Note: 例外処理を {@link ConfigManager} クラス内で完結してしまうとエラーメッセージをログにしか残せないため、
  * 例外発生をプレイヤーへ知らせる手段がなくなる。例外をプレイヤーへ知らせないと壊れた設定のままプラグインが動作することに繋がりかねない。</p>
  */
