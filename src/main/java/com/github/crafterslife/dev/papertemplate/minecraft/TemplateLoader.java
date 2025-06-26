@@ -17,24 +17,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package com.github.crafterslife.dev.papertemplate.paper.listeners;
+package com.github.crafterslife.dev.papertemplate.minecraft;
 
-import com.github.crafterslife.dev.papertemplate.paper.TemplateContext;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.jspecify.annotations.NullMarked;
+import io.papermc.paper.plugin.loader.PluginClasspathBuilder;
+import io.papermc.paper.plugin.loader.PluginLoader;
+import xyz.jpenilla.gremlin.runtime.platformsupport.DefaultsPaperPluginLoader;
 
-public final class TemplateListener implements Listener {
+@SuppressWarnings({"UnstableApiUsage", "unused"})
+public final class TemplateLoader implements PluginLoader {
 
-    private final TemplateContext context;
-
-    public TemplateListener(final TemplateContext context) {
-        this.context = context;
-    }
-
-    @EventHandler
-    private void onInteracted(final PlayerInteractEvent event) {
-
+    @Override
+    public void classloader(final PluginClasspathBuilder classpathBuilder) {
+        new DefaultsPaperPluginLoader().classloader(classpathBuilder);
     }
 }

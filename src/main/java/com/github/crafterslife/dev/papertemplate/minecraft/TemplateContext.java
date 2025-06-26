@@ -17,17 +17,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package com.github.crafterslife.dev.papertemplate.paper;
+package com.github.crafterslife.dev.papertemplate.minecraft;
 
-import io.papermc.paper.plugin.loader.PluginClasspathBuilder;
-import io.papermc.paper.plugin.loader.PluginLoader;
-import xyz.jpenilla.gremlin.runtime.platformsupport.DefaultsPaperPluginLoader;
+import com.github.crafterslife.dev.papertemplate.configuration.ConfigManager;
+import com.github.crafterslife.dev.papertemplate.message.TranslationRegistry;
+import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 
-@SuppressWarnings({"UnstableApiUsage", "unused"})
-public final class TemplateLoader implements PluginLoader {
+public record TemplateContext(ComponentLogger logger, ConfigManager configManager, TranslationRegistry translationRegistry) {
 
-    @Override
-    public void classloader(final PluginClasspathBuilder classpathBuilder) {
-        new DefaultsPaperPluginLoader().classloader(classpathBuilder);
-    }
 }

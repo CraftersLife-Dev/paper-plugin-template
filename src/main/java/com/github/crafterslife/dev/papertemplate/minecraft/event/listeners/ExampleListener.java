@@ -17,16 +17,23 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package com.github.crafterslife.dev.papertemplate.paper;
+package com.github.crafterslife.dev.papertemplate.minecraft.event.listeners;
 
-public final class TemplatePermissions {
+import com.github.crafterslife.dev.papertemplate.minecraft.TemplateContext;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerInteractEvent;
 
-    private static final String PREFIX = "template."; // TODO: 小文字のプラグイン名+.に書き換えてね
+public final class ExampleListener implements Listener {
 
-    private TemplatePermissions() {
+    private final TemplateContext context;
 
+    public ExampleListener(final TemplateContext context) {
+        this.context = context;
     }
 
-    public static final String COMMAND_ADMIN = PREFIX + "command.admin";
-    public static final String COMMAND_ADMIN_RELOAD = COMMAND_ADMIN + ".reload";
+    @EventHandler
+    private void onInteracted(final PlayerInteractEvent event) {
+
+    }
 }

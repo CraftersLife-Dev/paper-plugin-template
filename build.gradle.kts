@@ -27,7 +27,7 @@ dependencies {
     compileOnly(libs.mini.placeholders)
 
     // Libraries
-    compileOnly(libs.configurate.yaml) // Paperに組み込んである
+    compileOnly(libs.configurate.yaml) // Paperに組み込んであるためダウンロードは不要
     runtimeDownload(libs.adventure.serializer.configurate)
 }
 
@@ -38,9 +38,9 @@ paperPluginYaml {
     website = "https://github.com/CraftersLife-Dev"
     apiVersion = "1.21"
 
-    main = "$mainPackage.paper.TemplatePlugin" // TODO: JavaPluginの具象クラス名に変えてね
-    bootstrapper = "$mainPackage.paper.TemplateBootstrap" // TODO: PluginBootstrapの具象クラス名に変えてね
-    loader = "$mainPackage.paper.TemplateLoader" // TODO: PluginLoaderの具象クラス名に変えてね
+    main = "$mainPackage.minecraft.TemplatePlugin" // TODO: JavaPluginの具象クラス名に変えてね
+    bootstrapper = "$mainPackage.minecraft.TemplateBootstrap" // TODO: PluginBootstrapの具象クラス名に変えてね
+    loader = "$mainPackage.minecraft.TemplateLoader" // TODO: PluginLoaderの具象クラス名に変えてね
 
     permissions {
         register("${rootProject.name.lowercase()}.command.admin") {

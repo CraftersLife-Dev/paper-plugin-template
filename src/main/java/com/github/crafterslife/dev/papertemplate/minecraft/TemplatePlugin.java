@@ -17,9 +17,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package com.github.crafterslife.dev.papertemplate.paper;
+package com.github.crafterslife.dev.papertemplate.minecraft;
 
-import com.github.crafterslife.dev.papertemplate.paper.listeners.TemplateListener;
+import com.github.crafterslife.dev.papertemplate.minecraft.event.listeners.ExampleListener;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -34,7 +34,7 @@ public final class TemplatePlugin extends JavaPlugin { // TODO: プラグイン�
     public TemplatePlugin(final TemplateContext context) {
         this.context = context;
         this.listenerFactories = Set.of(
-                TemplateListener::new
+                ExampleListener::new
         );
     }
 
