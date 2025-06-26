@@ -17,12 +17,23 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package com.github.crafterslife.dev.papertemplate.minecraft;
+package com.github.crafterslife.dev.papertemplate.paper.event.listeners;
 
-import com.github.crafterslife.dev.papertemplate.configuration.ConfigManager;
-import com.github.crafterslife.dev.papertemplate.message.TranslationRegistry;
-import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
+import com.github.crafterslife.dev.papertemplate.paper.TemplateContext;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerInteractEvent;
 
-public record TemplateContext(ComponentLogger logger, ConfigManager configManager, TranslationRegistry translationRegistry) {
+public final class ExampleListener implements Listener {
 
+    private final TemplateContext context;
+
+    public ExampleListener(final TemplateContext context) {
+        this.context = context;
+    }
+
+    @EventHandler
+    private void onInteracted(final PlayerInteractEvent event) {
+
+    }
 }

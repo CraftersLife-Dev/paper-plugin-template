@@ -1,4 +1,4 @@
-package com.github.crafterslife.dev.papertemplate.minecraft.event.events;
+package com.github.crafterslife.dev.papertemplate.paper.event.events;
 
 import net.kyori.adventure.text.Component;
 import org.bukkit.event.Event;

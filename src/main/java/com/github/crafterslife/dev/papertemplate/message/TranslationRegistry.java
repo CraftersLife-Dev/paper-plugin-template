@@ -27,7 +27,6 @@ import net.kyori.adventure.translation.GlobalTranslator;
 import net.kyori.adventure.translation.Translator;
 import net.kyori.adventure.util.UTF8ResourceBundleControl;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
-import org.jspecify.annotations.NullMarked;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -42,6 +41,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+// このクラスがシングルトンで設計されていない理由は、テストを容易にするためです。
 public final class TranslationRegistry {
 
     private static final Locale FALLBACK_LOCALE = Locale.JAPANESE;
@@ -69,7 +69,7 @@ public final class TranslationRegistry {
         try {
             MoreFiles.createDirectoriesIfNotExists(this.translationsDirectory);
         } catch (final IOException exception) {
-            throw new UncheckedIOException(exception);
+            throw new UncheckedIOException("ディレクトリの生成に失敗: %s".formatted(this.translationsDirectory), exception);
         }
     }
 
@@ -84,7 +84,7 @@ public final class TranslationRegistry {
         this.translationStore = MiniMessageTranslationStore.create(translationKey);
         this.translationStore.defaultLocale(FALLBACK_LOCALE);
 
-        this.loadFromUserDirectory();
+        this.loadFromPluginDirectory();
         this.loadFromResourceBundle();
         GlobalTranslator.translator().addSource(this.translationStore);
 
@@ -94,7 +94,7 @@ public final class TranslationRegistry {
         this.logger.info("翻訳の読み込みに成功: [{}]", locales);
     }
 
-    private void loadFromUserDirectory() {
+    private void loadFromPluginDirectory() {
         try (final Stream<Path> pathStream = Files.list(this.translationsDirectory)) {
             pathStream
                     .filter(Files::isRegularFile)
@@ -106,7 +106,7 @@ public final class TranslationRegistry {
                         this.installedLocales.add(locale);
                     });
         } catch (final IOException exception) {
-            throw new UncheckedIOException(exception);
+            throw new UncheckedIOException("ディレクトリの走査に失敗: %s".formatted(this.translationsDirectory), exception);
         }
     }
 
@@ -127,7 +127,7 @@ public final class TranslationRegistry {
                         this.copyTranslationsDirectoryFrom(entry.getValue());
                     }));
         } catch (final IOException exception) {
-            throw new UncheckedIOException(exception);
+            throw new UncheckedIOException("プラグインJarの走査に失敗: %s".formatted(this.pluginSource), exception);
         }
     }
 
@@ -136,7 +136,7 @@ public final class TranslationRegistry {
         final String localeString = fileName.substring("messages_".length()).replace(".properties", "");
         final Locale locale = Translator.parseLocale(localeString);
         if (locale == null) {
-            throw new IllegalArgumentException("不明なロケール: %s".formatted(localeString));
+            throw new IllegalArgumentException("ロケールが不明: %s".formatted(localeString));
         }
 
         return locale;
@@ -149,7 +149,7 @@ public final class TranslationRegistry {
         } catch (final FileAlreadyExistsException ignore) {
             // ignore
         } catch (final IOException exception) {
-            throw new UncheckedIOException(exception);
+            throw new UncheckedIOException("ファイルのコピーに失敗: %s".formatted(sourcePath) ,exception);
         }
     }
 }

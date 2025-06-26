@@ -19,8 +19,8 @@
  */
 package com.github.crafterslife.dev.papertemplate.configuration;
 
-import com.github.crafterslife.dev.papertemplate.minecraft.TemplateBootstrap;
-import com.github.crafterslife.dev.papertemplate.minecraft.TemplateContext;
+import com.github.crafterslife.dev.papertemplate.paper.TemplateBootstrap;
+import com.github.crafterslife.dev.papertemplate.paper.TemplateContext;
 import io.papermc.paper.plugin.bootstrap.BootstrapContext;
 import net.kyori.adventure.serializer.configurate4.ConfigurateComponentSerializer;
 import net.kyori.adventure.sound.Sound;

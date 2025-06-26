@@ -17,10 +17,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package com.github.crafterslife.dev.papertemplate.minecraft;
+package com.github.crafterslife.dev.papertemplate.paper;
 
-import com.github.crafterslife.dev.papertemplate.minecraft.commands.AdminCommand;
-import com.github.crafterslife.dev.papertemplate.minecraft.commands.InternalCommand;
+import com.github.crafterslife.dev.papertemplate.paper.commands.AdminCommand;
+import com.github.crafterslife.dev.papertemplate.paper.commands.InternalCommand;
 import com.github.crafterslife.dev.papertemplate.configuration.ConfigManager;
 import com.github.crafterslife.dev.papertemplate.message.TranslationRegistry;
 import io.papermc.paper.plugin.bootstrap.BootstrapContext;

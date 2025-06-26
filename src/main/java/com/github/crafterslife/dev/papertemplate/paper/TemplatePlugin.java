@@ -17,9 +17,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package com.github.crafterslife.dev.papertemplate.minecraft;
+package com.github.crafterslife.dev.papertemplate.paper;
 
-import com.github.crafterslife.dev.papertemplate.minecraft.event.listeners.ExampleListener;
+import com.github.crafterslife.dev.papertemplate.paper.event.listeners.ExampleListener;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
