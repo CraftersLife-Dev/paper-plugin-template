@@ -24,19 +24,16 @@ import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.Set;
-import java.util.function.Function;
 
 public final class TemplatePlugin extends JavaPlugin { // TODO: クラス名は書き換えてね
 
-    private final TemplateBootstrapContext context;
-    private final Set<Function<TemplateBootstrapContext, Listener>> listenerFactories;
+    private final Set<Listener> listenerFactories;
 
-    TemplatePlugin(final TemplateBootstrapContext context) {
-        this.context = context;
+    TemplatePlugin(final TemplateContext context) {
 
         // リスナークラスを定義したらここに追加
         this.listenerFactories = Set.of(
-                ExampleListener::new
+                new ExampleListener(context)
         );
     }
 
@@ -44,8 +41,6 @@ public final class TemplatePlugin extends JavaPlugin { // TODO: クラス名は�
     public void onEnable() {
 
         // リスナーを登録
-        this.listenerFactories.stream()
-                .map(factory -> factory.apply(this.context))
-                .forEach(listener -> this.getServer().getPluginManager().registerEvents(listener, this));
+        this.listenerFactories.forEach(listener -> this.getServer().getPluginManager().registerEvents(listener, this));
     }
 }

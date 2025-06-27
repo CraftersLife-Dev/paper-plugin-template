@@ -19,16 +19,16 @@
  */
 package com.github.crafterslife.dev.papertemplate.paper.event.listeners;
 
-import com.github.crafterslife.dev.papertemplate.paper.TemplateBootstrapContext;
+import com.github.crafterslife.dev.papertemplate.paper.TemplateContext;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
 
 public final class ExampleListener implements Listener {
 
-    private final TemplateBootstrapContext context;
+    private final TemplateContext context;
 
-    public ExampleListener(final TemplateBootstrapContext context) {
+    public ExampleListener(final TemplateContext context) {
         this.context = context;
     }
 

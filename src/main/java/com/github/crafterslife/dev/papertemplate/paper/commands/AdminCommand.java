@@ -19,29 +19,36 @@
  */
 package com.github.crafterslife.dev.papertemplate.paper.commands;
 
-import com.github.crafterslife.dev.papertemplate.message.TranslationService;
-import com.github.crafterslife.dev.papertemplate.paper.TemplateBootstrapContext;
-import com.github.crafterslife.dev.papertemplate.paper.TemplatePermissions;
 import com.github.crafterslife.dev.papertemplate.configuration.ConfigManager;
+import com.github.crafterslife.dev.papertemplate.message.TranslationService;
 import com.github.crafterslife.dev.papertemplate.message.TranslationSource;
+import com.github.crafterslife.dev.papertemplate.paper.TemplateContext;
+import com.github.crafterslife.dev.papertemplate.paper.TemplatePermissions;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
+import io.papermc.paper.plugin.bootstrap.BootstrapContext;
 
 @SuppressWarnings("UnstableApiUsage")
 public final class AdminCommand implements InternalCommand {
 
-    private final String pluginName;
+    private final BootstrapContext bootstrapContext;
     private final ConfigManager configManager;
     private final TranslationSource translationSource;
     private final TranslationService translationService;
 
-    public AdminCommand(final TemplateBootstrapContext context) {
-        this.pluginName = context.bootstrapContext().getConfiguration().getName();
-        this.configManager = context.configManager();
-        this.translationSource = context.translationSource();
-        this.translationService = context.translationService();
+    public AdminCommand(
+            final BootstrapContext bootstrapContext,
+            final ConfigManager configManager,
+            final TranslationSource translationSource,
+            final TemplateContext pluginContext
+    ) {
+        this.bootstrapContext = bootstrapContext;
+        this.configManager = configManager;
+        this.translationSource = translationSource;
+        this.translationService = pluginContext.translationService();
+
     }
 
     // Admin用のコマンドはここに集約
@@ -49,7 +56,7 @@ public final class AdminCommand implements InternalCommand {
     public LiteralCommandNode<CommandSourceStack> create() {
 
         // ルートコマンド
-        final var root = Commands.literal(this.pluginName.toLowerCase())
+        final var root = Commands.literal(this.bootstrapContext.getPluginMeta().getName().toLowerCase())
                 .requires(context -> context.getSender().hasPermission(TemplatePermissions.COMMAND_ADMIN));
 
         // リロードコマンド
@@ -70,6 +77,6 @@ public final class AdminCommand implements InternalCommand {
 
     @Override
     public String description() {
-        return "A %s provided admin command".formatted(this.pluginName);
+        return "A %s provided admin command".formatted(this.bootstrapContext.getPluginMeta().getName());
     }
 }

@@ -19,7 +19,7 @@
  */
 package com.github.crafterslife.dev.papertemplate.message;
 
-import com.github.crafterslife.dev.papertemplate.paper.TemplateBootstrapContext;
+import com.github.crafterslife.dev.papertemplate.paper.TemplateContext;
 import com.github.crafterslife.dev.papertemplate.utility.MoreFiles;
 import io.papermc.paper.plugin.bootstrap.BootstrapContext;
 import io.papermc.paper.plugin.configuration.PluginMeta;
@@ -48,7 +48,6 @@ import java.util.stream.Stream;
  * 翻訳可能なシステムメッセージの管理を担う。
  *
  * <p>このクラスは、翻訳可能なシステムメッセージの読み込みや、メッセージファイルの書き込みをおこなう。</p>
- * <p>Note: このクラスのインスタンスが必要な場合は、 {@link TemplateBootstrapContext#translationSource()} から取得する。</p>
  */
 // このクラスをシングルトンで設計しなかった理由は、テストを容易にするため
 @SuppressWarnings("UnstableApiUsage")
@@ -73,7 +72,7 @@ public final class TranslationSource {
         this.pluginMeta = bootstrapContext.getPluginMeta();
         this.logger = bootstrapContext.getLogger();
         this.pluginSource = bootstrapContext.getPluginSource();
-        this.translationsDirectory = bootstrapContext.getDataDirectory().resolve("translations");
+        this.translationsDirectory = bootstrapContext.getDataDirectory().resolve("translationService");
         this.installedLocales = ConcurrentHashMap.newKeySet();
 
         try {
@@ -147,7 +146,7 @@ public final class TranslationSource {
             // jarはアーカイブファイルなので、一旦展開しなければFiles#listなどは直接使えない
             MoreFiles.walkAsDirectory(this.pluginSource, pathStream -> pathStream
                     .filter(Files::isRegularFile)
-                    .filter(path -> path.toString().startsWith("/translations/messages_"))
+                    .filter(path -> path.toString().startsWith("/translationService/messages_"))
                     .filter(path -> path.toString().endsWith(".properties"))
                     .map(filePath -> { // ロケールとファイルパスのペアを生成
                         record Translation(Locale locale, Path path) {}
@@ -155,7 +154,7 @@ public final class TranslationSource {
                     })
                     .filter(translation -> !this.installedLocales.contains(translation.locale())) // インストール済みロケールはスキップ
                     .forEach(translation -> { // loadFromPluginDirectoryと同じ処理を実行する
-                        final ResourceBundle bundle = ResourceBundle.getBundle("translations/messages", translation.locale(), UTF8ResourceBundleControl.get());
+                        final ResourceBundle bundle = ResourceBundle.getBundle("translationService/messages", translation.locale(), UTF8ResourceBundleControl.get());
                         this.translationStore.registerAll(translation.locale(), bundle, true);
                         this.installedLocales.add(translation.locale());
                         this.copyFrom(translation.path()); // 翻訳ディレクトリへのコピー

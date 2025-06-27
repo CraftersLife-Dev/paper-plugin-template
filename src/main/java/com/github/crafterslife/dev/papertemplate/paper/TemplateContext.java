@@ -19,19 +19,17 @@
  */
 package com.github.crafterslife.dev.papertemplate.paper;
 
-import com.github.crafterslife.dev.papertemplate.configuration.ConfigManager;
-import com.github.crafterslife.dev.papertemplate.message.TranslationSource;
+import com.github.crafterslife.dev.papertemplate.configuration.PrimaryConfig;
 import com.github.crafterslife.dev.papertemplate.message.TranslationService;
-import io.papermc.paper.plugin.bootstrap.BootstrapContext;
+
+import java.util.function.Supplier;
 
 /**
  * このプラグインのリソースをまとめたコンテナ
  *
- * @param bootstrapContext プラグインのメタ情報
- * @param configManager 設定管理
- * @param translationSource 翻訳管理
+ * @param primaryConfig 設定
+ * @param translationService 翻訳
  */
-@SuppressWarnings("UnstableApiUsage")
-public record TemplateBootstrapContext(BootstrapContext bootstrapContext, ConfigManager configManager, TranslationSource translationSource, TranslationService translationService) { // TODO: クラス名は書き換えてね
+public record TemplateContext(Supplier<PrimaryConfig> primaryConfig, TranslationService translationService) { // TODO: クラス名は書き換えてね
 
 }
