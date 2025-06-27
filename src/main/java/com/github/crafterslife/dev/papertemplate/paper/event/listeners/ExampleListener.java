@@ -24,14 +24,23 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
 
+/**
+ * リスナーの実例
+ */
 public final class ExampleListener implements Listener {
 
     private final TemplateContext context;
 
+    /**
+     * 新しい {@code ExampleListener} を生成する。
+     *
+     * @param context プラグインのコンテキスト
+     */
     public ExampleListener(final TemplateContext context) {
         this.context = context;
     }
 
+    // Note: イベントハンドラはプライベートメソッドにしよう
     @EventHandler
     private void onInteract(final PlayerInteractEvent event) {
 

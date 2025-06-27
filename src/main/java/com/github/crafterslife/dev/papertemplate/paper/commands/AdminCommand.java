@@ -30,6 +30,9 @@ import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
 import io.papermc.paper.plugin.bootstrap.BootstrapContext;
 
+/**
+ * 管理者向けの機能をコマンドとして定義するクラス。
+ */
 @SuppressWarnings("UnstableApiUsage")
 public final class AdminCommand implements InternalCommand {
 
@@ -38,17 +41,24 @@ public final class AdminCommand implements InternalCommand {
     private final TranslationSource translationSource;
     private final TranslationService translationService;
 
+    /**
+     * {@code AdminCommand}の新しいインスタンスを生成する。
+     *
+     * @param bootstrapContext  ブートストラップコンテキスト
+     * @param configManager     設定管理
+     * @param translationSource 翻訳管理
+     * @param templateContext   プラグインコンテキスト
+     */
     public AdminCommand(
             final BootstrapContext bootstrapContext,
             final ConfigManager configManager,
             final TranslationSource translationSource,
-            final TemplateContext pluginContext
+            final TemplateContext templateContext
     ) {
         this.bootstrapContext = bootstrapContext;
         this.configManager = configManager;
         this.translationSource = translationSource;
-        this.translationService = pluginContext.translationService();
-
+        this.translationService = templateContext.translationService();
     }
 
     // Admin用のコマンドはここに集約
@@ -79,4 +89,5 @@ public final class AdminCommand implements InternalCommand {
     public String description() {
         return "A %s provided admin command".formatted(this.bootstrapContext.getPluginMeta().getName());
     }
+
 }

@@ -66,15 +66,15 @@ public final class MoreFiles {
 
         // ディレクトリだった場合は普通に走査
         if (Files.isDirectory(archivePath)) {
-            try (final Stream<Path> paths = Files.walk(archivePath)) {
+            try (Stream<Path> paths = Files.walk(archivePath)) {
                 consumer.accept(paths);
             }
         }
 
         // アーカイブファイルだった場合は裏技使って走査
-        try (final FileSystem archiveFile = FileSystems.newFileSystem(archivePath, MoreFiles.class.getClassLoader())) {
+        try (FileSystem archiveFile = FileSystems.newFileSystem(archivePath, MoreFiles.class.getClassLoader())) {
             final Path rootPath = archiveFile.getRootDirectories().iterator().next();
-            try (final Stream<Path> paths = Files.walk(rootPath)) {
+            try (Stream<Path> paths = Files.walk(rootPath)) {
                 consumer.accept(paths);
             }
         }

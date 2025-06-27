@@ -35,10 +35,11 @@ public final class TranslationServiceFactory {
      * TranslationServiceのプロキシインスタンスを生成する。
      *
      * @param serviceInterface インターフェース
-     * @return プロキシインスタンス
      * @param <T> インターフェースの型
+     * @return プロキシインスタンス
+     * @throws IllegalArgumentException インターフェースではない場合
      */
-    public static <T> T create(final Class<T> serviceInterface) {
+    public static <T> T create(final Class<T> serviceInterface) throws IllegalArgumentException {
         if (!serviceInterface.isInterface()) {
             throw new IllegalArgumentException("インターフェースではない: %s".formatted(serviceInterface.getName()));
         }

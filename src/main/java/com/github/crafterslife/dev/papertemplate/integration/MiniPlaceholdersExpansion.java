@@ -34,7 +34,7 @@ public final class MiniPlaceholdersExpansion {
 
     private static byte miniPlaceholdersLoaded = -1;
 
-    public MiniPlaceholdersExpansion() {
+    private MiniPlaceholdersExpansion() {
 
     }
 
@@ -49,7 +49,7 @@ public final class MiniPlaceholdersExpansion {
                 final String name = MiniPlaceholders.class.getName();
                 Objects.requireNonNull(name);
                 miniPlaceholdersLoaded = 1;
-            } catch (final NoClassDefFoundError error) {
+            } catch (final NoClassDefFoundError __) {
                 miniPlaceholdersLoaded = 0;
             }
         }
@@ -78,6 +78,7 @@ public final class MiniPlaceholdersExpansion {
      * <p>MiniPlaceholdersが読み込まれている場合は、オーディエンス、およびグローバルのプレースホルダーを返すが、
      * 読み込まれていない場合は空っぽのTagResolverを返す。</p>
      *
+     * @param audience 検証するオーディエンス
      * @return オーディエンス、およびグローバルのプレースホルダーに基づいたTagResolver
      */
     public static TagResolver audiencePlaceholders(final Audience audience) {

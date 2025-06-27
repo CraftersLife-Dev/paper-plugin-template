@@ -33,7 +33,9 @@ import java.util.Set;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jspecify.annotations.Nullable;
 
-// サーバーが読み込まれる前の初期化を担う
+/**
+ * サーバーが読み込まれる前のプラグインの初期化を担う。
+ */
 @SuppressWarnings({"UnstableApiUsage", "unused"})
 public final class TemplateBootstrap implements PluginBootstrap { // TODO: クラス名は書き換えてね
 
@@ -41,8 +43,12 @@ public final class TemplateBootstrap implements PluginBootstrap { // TODO: ク�
     private @Nullable TranslationSource translationSource;
     private @Nullable TemplateContext templateContext;
 
-    // サーバーによって呼び出されるプラグインの初期化処理を実行
-    // 設定や翻訳、あるいはデータベースなどを初期化しておくためのもの
+    /**
+     * サーバーによって呼び出されるプラグインの初期化処理を実行する。
+     * 設定や翻訳、あるいはデータベースなどを初期化する。
+     *
+     * @param bootstrapContext サーバーが提供するコンテキスト
+     */
     @Override
     public void bootstrap(final BootstrapContext bootstrapContext) {
 
@@ -62,8 +68,11 @@ public final class TemplateBootstrap implements PluginBootstrap { // TODO: ク�
 
     /**
      * プラグインコンテキストを初期化する。
+     *
+     * @param bootstrapContext サーバーが提供するコンテキスト
+     * @throws IllegalStateException リソースがすでに初期化されている場合
      */
-    private void initializeResources(final BootstrapContext bootstrapContext) {
+    private void initializeResources(final BootstrapContext bootstrapContext) throws IllegalStateException {
         // このメソッドが2回以上呼ばれるようなことがあれば例外
         if (Objects.isNull(this.configManager) || Objects.isNull(this.translationSource) || Objects.isNull(this.templateContext)) {
             throw new IllegalStateException("リソースはすでに初期化済み");

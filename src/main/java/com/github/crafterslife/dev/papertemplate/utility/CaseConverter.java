@@ -21,13 +21,17 @@ package com.github.crafterslife.dev.papertemplate.utility;
 
 import java.util.regex.Pattern;
 
+/**
+ * 文字列の命名規則間変換するためのユーティリティ
+ */
 public final class CaseConverter {
-
-    private CaseConverter() {
-    }
 
     // 例: "playerName" -> "player_name"
     private static final Pattern CAMEL_TO_SNAKE_PATTERN = Pattern.compile("([a-z])([A-Z]+)");
+
+    private CaseConverter() {
+
+    }
 
     /**
      * キャメルケースの文字列をスネークケースに変換する。

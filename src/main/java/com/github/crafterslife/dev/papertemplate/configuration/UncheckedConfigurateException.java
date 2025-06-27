@@ -36,23 +36,23 @@ final class UncheckedConfigurateException extends RuntimeException {
     @Serial
     private static final long serialVersionUID = -3277407553778580668L;
 
-    public UncheckedConfigurateException() {
-        super();
+    UncheckedConfigurateException() {
+
     }
 
-    public UncheckedConfigurateException(final String message) {
+    UncheckedConfigurateException(final String message) {
         super(message);
     }
 
-    public UncheckedConfigurateException(final ConfigurateException cause) {
+    UncheckedConfigurateException(final ConfigurateException cause) {
         super(cause);
     }
 
-    public UncheckedConfigurateException(final String message, final ConfigurateException cause) {
+    UncheckedConfigurateException(final String message, final ConfigurateException cause) {
         super(message, cause);
     }
 
-    public UncheckedConfigurateException(final String message, final ConfigurateException cause, final boolean enableSuppression, final boolean writableStackTrace) {
+    UncheckedConfigurateException(final String message, final ConfigurateException cause, final boolean enableSuppression, final boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
 }

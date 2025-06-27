@@ -61,12 +61,17 @@ public final class TranslationSource {
     private final Set<Locale> installedLocales; // 翻訳可能な言語のコレクション
     private @Nullable MiniMessageTranslationStore translationStore; // 翻訳メッセージの格納
 
+    private record Translation(Locale locale, Path path) {
+
+    }
+
     /**
      * 頼むからこれは呼び出さないでくれ。
      *
      * @param bootstrapContext ブートストラップコンテキスト
+     * @throws UncheckedIOException ディレクトリの生成に失敗した場合
      */
-    public TranslationSource(final BootstrapContext bootstrapContext) {
+    public TranslationSource(final BootstrapContext bootstrapContext) throws UncheckedIOException {
         this.pluginMeta = bootstrapContext.getPluginMeta();
         this.logger = bootstrapContext.getLogger();
         this.pluginSource = bootstrapContext.getPluginSource();
@@ -116,7 +121,7 @@ public final class TranslationSource {
      */
     private void loadFromPluginDirectory() {
         Objects.requireNonNull(this.translationStore);
-        try (final Stream<Path> pathStream = Files.list(this.translationsDirectory)) {
+        try (Stream<Path> pathStream = Files.list(this.translationsDirectory)) {
             // プラグインディレクトリ内にあるtranslationsディレクトリを走査する
             pathStream
                     .filter(Files::isRegularFile)
@@ -146,10 +151,7 @@ public final class TranslationSource {
                     .filter(Files::isRegularFile)
                     .filter(path -> path.toString().startsWith("/translationService/messages_"))
                     .filter(path -> path.toString().endsWith(".properties"))
-                    .map(filePath -> { // ロケールとファイルパスのペアを生成
-                        record Translation(Locale locale, Path path) {}
-                        return new Translation(this.parseLocale(filePath), filePath);
-                    })
+                    .map(filePath -> new Translation(this.parseLocale(filePath), filePath))
                     .filter(translation -> !this.installedLocales.contains(translation.locale())) // インストール済みロケールはスキップ
                     .forEach(translation -> { // loadFromPluginDirectoryと同じ処理を実行する
                         final ResourceBundle bundle = ResourceBundle.getBundle("translationService/messages", translation.locale(), UTF8ResourceBundleControl.get());
@@ -195,7 +197,7 @@ public final class TranslationSource {
         } catch (final FileAlreadyExistsException ignore) {
             // ignore
         } catch (final IOException exception) {
-            throw new UncheckedIOException("ファイルのコピーに失敗: %s".formatted(sourcePath) ,exception);
+            throw new UncheckedIOException("ファイルのコピーに失敗: %s".formatted(sourcePath), exception);
         }
     }
 }

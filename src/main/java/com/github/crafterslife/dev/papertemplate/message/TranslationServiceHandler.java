@@ -38,7 +38,7 @@ import org.jspecify.annotations.Nullable;
  */
 class TranslationServiceHandler implements InvocationHandler {
 
-    public TranslationServiceHandler() {
+    TranslationServiceHandler() {
 
     }
 
@@ -72,7 +72,7 @@ class TranslationServiceHandler implements InvocationHandler {
                     final Object value = Objects.requireNonNull(args[i], "value");
                     return TranslationServiceHandler.asTagResolver(parameters[i], value);
                 })
-                .reduce(TagResolver.builder(), TagResolver.Builder::resolver, (builder, $$) -> builder)
+                .reduce(TagResolver.builder(), TagResolver.Builder::resolver, (builder, __) -> builder)
                 .build();
 
         // メッセージのレンダリング

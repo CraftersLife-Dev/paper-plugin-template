@@ -24,6 +24,9 @@ import java.util.Set;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
+/**
+ * プラグインを読み込んだあとの処理を担う。
+ */
 public final class TemplatePlugin extends JavaPlugin { // TODO: クラス名は書き換えてね
 
     private final Set<Listener> listenerFactories;

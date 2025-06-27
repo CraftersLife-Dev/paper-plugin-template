@@ -23,7 +23,9 @@ import io.papermc.paper.plugin.loader.PluginClasspathBuilder;
 import io.papermc.paper.plugin.loader.PluginLoader;
 import xyz.jpenilla.gremlin.runtime.platformsupport.DefaultsPaperPluginLoader;
 
-// プラグインを読み込むために必要な依存関係の解決を担う
+/**
+ * プラグインを読み込むために必要な依存関係の解決を担う。
+ */
 @SuppressWarnings({"UnstableApiUsage", "unused"})
 public final class TemplateLoader implements PluginLoader { // TODO: クラス名は書き換えてね
 

@@ -19,12 +19,16 @@
  */
 package com.github.crafterslife.dev.papertemplate.paper;
 
+/**
+ * このプラグインで比較する権限のコレクション
+ */
 public final class TemplatePermissions { // TODO: クラス名は書き換えてね
+
+
+    public static final String COMMAND_ADMIN = "template.command.admin";
+    public static final String COMMAND_ADMIN_RELOAD = "template.command.admin.reload";
 
     private TemplatePermissions() {
 
     }
-
-    public static final String COMMAND_ADMIN = "template.command.admin";
-    public static final String COMMAND_ADMIN_RELOAD = "template.command.admin.reload";
 }

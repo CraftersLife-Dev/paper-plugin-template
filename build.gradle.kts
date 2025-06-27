@@ -6,6 +6,7 @@ version = projectVersion
 
 plugins {
     id("java")
+    id("checkstyle")
     alias(libs.plugins.shadow)
     alias(libs.plugins.resource.factory)
     alias(libs.plugins.run.paper)
@@ -104,5 +105,10 @@ tasks {
     writeDependencies {
         repos.add("https://repo.papermc.io/repository/maven-public/")
         repos.add("https://repo.maven.apache.org/maven2/")
+    }
+
+    checkstyle {
+        toolVersion = libs.versions.check.style.get()
+        configDirectory = rootDir.resolve(".checkstyle")
     }
 }

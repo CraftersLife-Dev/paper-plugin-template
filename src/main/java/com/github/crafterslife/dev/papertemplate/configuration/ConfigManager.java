@@ -86,7 +86,7 @@ public final class ConfigManager {
     public void reloadConfigurations() {
         this.logger.info("設定を読み込み中...");
         try {
-            this.primaryConfig = this.load(PrimaryConfig.class, PRIMARY_CONFIG_FILE_NAME, PRIMARY_CONFIG_HEADER);
+            this.primaryConfig = this.load(PrimaryConfig.class, PRIMARY_CONFIG_FILE_NAME);
         } catch (final ConfigurateException exception) {
             throw new UncheckedConfigurateException("設定の読み込みに失敗", exception);
         }
@@ -105,13 +105,13 @@ public final class ConfigManager {
      * @return デシリアライズされたオブジェクト
      * @throws ConfigurateException 設定の読み込みや保存、あるいはデシリアライズなどによってConfigurateエラーが発生した場合
      */
-    private <T> T load(final Class<T> clazz, final String fileName, String header) throws ConfigurateException {
+    private <T> T load(final Class<T> clazz, final String fileName) throws ConfigurateException {
         // データディレクトリパスとfileNameを繋ぎ、新たなファイルパスを生成する。
         final Path filePath = this.dataDirectory.resolve(fileName);
 
         // ローダーを生成して、設定ファイルをオブジェクトへとデシリアライズする。
         // 設定ファイルがファイルパスに存在しなかった場合は、clazzのオブジェクトが直接生成される。
-        final ConfigurationLoader<CommentedConfigurationNode> loader = this.configurationLoader(filePath, header);
+        final ConfigurationLoader<CommentedConfigurationNode> loader = this.configurationLoader(filePath);
         final CommentedConfigurationNode root = loader.load(); // ルートとなるノード
         final T config = root.get(clazz);
         if (config == null) {
@@ -138,7 +138,7 @@ public final class ConfigManager {
      */
     // 独自のシリアライザーを登録したい場合は以下を参照
     // https://github.com/SpongePowered/Configurate/wiki/Type-Serializers
-    private ConfigurationLoader<CommentedConfigurationNode> configurationLoader(final Path filePath, final String header) {
+    private ConfigurationLoader<CommentedConfigurationNode> configurationLoader(final Path filePath) {
 
         // Adventureシリアライザー
         final var adventureSerializer = ConfigurateComponentSerializer.builder()
@@ -153,7 +153,7 @@ public final class ConfigManager {
                 .headerMode(HeaderMode.PRESET)
                 .defaultOptions(options -> options
                         .shouldCopyDefaults(true)
-                        .header(header)
+                        .header(PRIMARY_CONFIG_HEADER)
                         .serializers(builder -> builder.registerAll(adventureSerializer))) // Adventureのシリアライザーを登録
                 .path(filePath)
                 .build();
