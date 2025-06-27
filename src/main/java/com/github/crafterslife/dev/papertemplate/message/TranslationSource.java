@@ -19,7 +19,6 @@
  */
 package com.github.crafterslife.dev.papertemplate.message;
 
-import com.github.crafterslife.dev.papertemplate.paper.TemplateContext;
 import com.github.crafterslife.dev.papertemplate.utility.MoreFiles;
 import io.papermc.paper.plugin.bootstrap.BootstrapContext;
 import io.papermc.paper.plugin.configuration.PluginMeta;
