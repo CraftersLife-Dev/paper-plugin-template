@@ -73,6 +73,11 @@ configurations {
 }
 
 tasks {
+    compileJava {
+        // TranslationServiceの変数名を保存してTranslationServiceHandlerで参照するために必要。
+        options.compilerArgs.add("-parameters")
+    }
+
     shadowJar {
         archiveClassifier = null as String?
         gremlin {

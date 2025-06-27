@@ -19,7 +19,7 @@
  */
 package com.github.crafterslife.dev.papertemplate.configuration;
 
-import com.github.crafterslife.dev.papertemplate.paper.TemplateContext;
+import com.github.crafterslife.dev.papertemplate.paper.TemplateBootstrapContext;
 import io.papermc.paper.plugin.bootstrap.BootstrapContext;
 import net.kyori.adventure.serializer.configurate4.ConfigurateComponentSerializer;
 import net.kyori.adventure.sound.Sound;
@@ -42,7 +42,7 @@ import java.util.Objects;
  *
  * <p>このクラスはプラグインのデータディレクトリ内のYAML設定ファイルを扱い、オブジェクトへのシリアライズおよびデシリアライズをおこなう。</p>
  * <p>WARN: このクラスのインスタンスは安易に生成しない。複数の設定オブジェクトが存在する危険な状態になる。
- * このクラスのインスタンスが必要な場合は、 {@link TemplateContext#configManager()} から取得する。</P>
+ * このクラスのインスタンスが必要な場合は、 {@link TemplateBootstrapContext#configManager()} から取得する。</P>
  */
 // このクラスをシングルトンで設計しなかった理由は、テストを容易にするため
 @SuppressWarnings("UnstableApiUsage")

@@ -20,7 +20,9 @@
 package com.github.crafterslife.dev.papertemplate.paper;
 
 import com.github.crafterslife.dev.papertemplate.configuration.ConfigManager;
-import com.github.crafterslife.dev.papertemplate.message.TranslationManager;
+import com.github.crafterslife.dev.papertemplate.message.TranslationSource;
+import com.github.crafterslife.dev.papertemplate.message.TranslationService;
+import com.github.crafterslife.dev.papertemplate.message.TranslationServiceFactory;
 import com.github.crafterslife.dev.papertemplate.paper.commands.AdminCommand;
 import com.github.crafterslife.dev.papertemplate.paper.commands.InternalCommand;
 import io.papermc.paper.plugin.bootstrap.BootstrapContext;
@@ -35,14 +37,14 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.function.Function;
 
-// サーバーが読み込まれる前の初期化を実行
+// サーバーが読み込まれる前の初期化を担う
 @SuppressWarnings({"UnstableApiUsage", "unused"})
-public final class TemplateBootstrap implements PluginBootstrap { // TODO: 書き換えてね
+public final class TemplateBootstrap implements PluginBootstrap { // TODO: クラス名は書き換えてね
 
-    private @Nullable TemplateContext templateContext;
+    private @Nullable TemplateBootstrapContext templateBootstrapContext;
 
-    // サーバーによって呼び出されるプラグインの起動処理を実行
-    // 設定やメッセージ、あるいはデータベースなどのリソースを初期化
+    // サーバーによって呼び出されるプラグインの初期化処理を実行
+    // 設定や翻訳、あるいはデータベースなどを初期化しておくためのもの
     @Override
     public void bootstrap(final BootstrapContext bootstrapContext) {
 
@@ -57,28 +59,30 @@ public final class TemplateBootstrap implements PluginBootstrap { // TODO: 書�
     // JavaPluginのインスタンスを生成
     @Override
     public JavaPlugin createPlugin(final PluginProviderContext providerContext) {
-        Objects.requireNonNull(this.templateContext);
-        return new TemplatePlugin(this.templateContext);
+        Objects.requireNonNull(this.templateBootstrapContext);
+        return new TemplatePlugin(this.templateBootstrapContext);
     }
 
     /**
      * プラグインコンテキストを初期化する。
      */
     private void initializeResources(final BootstrapContext bootstrapContext) {
-        if (this.templateContext == null) {
-            // 設定と翻訳メッセージのインスタンスを生成
-            final var pluginContext = new TemplateContext(
+        if (this.templateBootstrapContext == null) {
+
+            // 設定と翻訳のインスタンスを生成
+            final var pluginContext = new TemplateBootstrapContext(
                     bootstrapContext,
                     new ConfigManager(bootstrapContext),
-                    new TranslationManager(bootstrapContext)
+                    new TranslationSource(bootstrapContext),
+                    TranslationServiceFactory.create(TranslationService.class)
             );
 
-            // 設定と翻訳メッセージを初期化
+            // 設定と翻訳を初期化
             pluginContext.configManager().reloadConfigurations();
-            pluginContext.translationManager().reloadTranslations();
+            pluginContext.translationSource().reloadTranslations();
 
             // フィールドに代入
-            this.templateContext = pluginContext;
+            this.templateBootstrapContext = pluginContext;
         } else {
             // このメソッドが2回以上呼ばれるようなことがあれば例外
             throw new IllegalStateException("リソースはすでに初期化済み");
@@ -91,16 +95,16 @@ public final class TemplateBootstrap implements PluginBootstrap { // TODO: 書�
      * @param lifecycleManager ライブサイクルイベントマネージャー
      */
     private void registerCommands(final LifecycleEventManager<BootstrapContext> lifecycleManager) {
-        Objects.requireNonNull(this.templateContext);
+        Objects.requireNonNull(this.templateBootstrapContext);
 
-        // Note: 新しいコマンドクラスを書いたら必ず追加
-        final Set<Function<TemplateContext, InternalCommand>> commandFactories = Set.of(
+        // Note: 新しいコマンドクラスを定義したらここに追加
+        final Set<Function<TemplateBootstrapContext, InternalCommand>> commandFactories = Set.of(
                 AdminCommand::new
         );
 
         lifecycleManager.registerEventHandler(LifecycleEvents.COMMANDS, event -> {
             for (final var factory : commandFactories) {
-                final InternalCommand command = factory.apply(this.templateContext); // コマンドのインスタンスを生成
+                final InternalCommand command = factory.apply(this.templateBootstrapContext); // コマンドのインスタンスを生成
                 event.registrar().register(command.create(), command.description(), command.aliases()); // コマンドを登録
             }
         });

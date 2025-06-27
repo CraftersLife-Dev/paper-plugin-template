@@ -19,11 +19,11 @@
  */
 package com.github.crafterslife.dev.papertemplate.paper.commands;
 
-import com.github.crafterslife.dev.papertemplate.paper.TemplateContext;
+import com.github.crafterslife.dev.papertemplate.message.TranslationService;
+import com.github.crafterslife.dev.papertemplate.paper.TemplateBootstrapContext;
 import com.github.crafterslife.dev.papertemplate.paper.TemplatePermissions;
 import com.github.crafterslife.dev.papertemplate.configuration.ConfigManager;
-import com.github.crafterslife.dev.papertemplate.message.TranslationMessages;
-import com.github.crafterslife.dev.papertemplate.message.TranslationManager;
+import com.github.crafterslife.dev.papertemplate.message.TranslationSource;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
@@ -34,12 +34,14 @@ public final class AdminCommand implements InternalCommand {
 
     private final String pluginName;
     private final ConfigManager configManager;
-    private final TranslationManager translationManager;
+    private final TranslationSource translationSource;
+    private final TranslationService translationService;
 
-    public AdminCommand(final TemplateContext context) {
-        this.pluginName = context.pluginContext().getConfiguration().getName();
+    public AdminCommand(final TemplateBootstrapContext context) {
+        this.pluginName = context.bootstrapContext().getConfiguration().getName();
         this.configManager = context.configManager();
-        this.translationManager = context.translationManager();
+        this.translationSource = context.translationSource();
+        this.translationService = context.translationService();
     }
 
     // Admin用のコマンドはここに集約
@@ -55,8 +57,8 @@ public final class AdminCommand implements InternalCommand {
                 .requires(context -> context.getSender().hasPermission(TemplatePermissions.COMMAND_ADMIN_RELOAD))
                 .executes(context -> {
                     this.configManager.reloadConfigurations();
-                    this.translationManager.reloadTranslations();
-                    TranslationMessages.configReloadSuccess(context.getSource().getSender());
+                    this.translationSource.reloadTranslations();
+                    this.translationService.sendCommandConfigReloadSuccess(context.getSource().getSender());
                     return Command.SINGLE_SUCCESS;
                 });
 

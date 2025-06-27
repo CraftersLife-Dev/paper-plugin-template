@@ -17,18 +17,28 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package com.github.crafterslife.dev.papertemplate.paper;
+package com.github.crafterslife.dev.papertemplate.utility;
 
-import io.papermc.paper.plugin.loader.PluginClasspathBuilder;
-import io.papermc.paper.plugin.loader.PluginLoader;
-import xyz.jpenilla.gremlin.runtime.platformsupport.DefaultsPaperPluginLoader;
+import java.util.regex.Pattern;
 
-// プラグインを読み込むために必要な依存関係の解決を担う
-@SuppressWarnings({"UnstableApiUsage", "unused"})
-public final class TemplateLoader implements PluginLoader { // TODO: クラス名は書き換えてね
+public final class CaseConverter {
 
-    @Override
-    public void classloader(final PluginClasspathBuilder classpathBuilder) {
-        new DefaultsPaperPluginLoader().classloader(classpathBuilder);
+    private CaseConverter() {
+    }
+
+    // 例: "playerName" -> "player_name"
+    private static final Pattern CAMEL_TO_SNAKE_PATTERN = Pattern.compile("([a-z])([A-Z]+)");
+
+    /**
+     * キャメルケースの文字列をスネークケースに変換する。
+     *
+     * @param camelCaseString キャメルケースの文字列
+     * @return スネークケースに変換された文字列
+     */
+    public static String toSnakeCase(final String camelCaseString) {
+        return CAMEL_TO_SNAKE_PATTERN
+                .matcher(camelCaseString)
+                .replaceAll("$1_$2")
+                .toLowerCase();
     }
 }

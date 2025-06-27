@@ -19,26 +19,22 @@
  */
 package com.github.crafterslife.dev.papertemplate.message;
 
-import net.kyori.adventure.audience.Audience;
-import net.kyori.adventure.text.Component;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
- * このプラグインで使用するシステムメッセージの集合体。
+ * メソッドに翻訳キーを関連付けるアノテーション。
  */
-// Note: プレフィックスなどを使用してキーを記述すると、リソースバンドルとのリンクが切れてしまうので注意が必要
-public final class TranslationMessages {
-
-    private TranslationMessages() {
-
-    }
+@Target(ElementType.METHOD)
+@Retention(RetentionPolicy.RUNTIME)
+@interface MessageKey {
 
     /**
-     * 設定の再読み込み成功メッセージを送信する。
+     * 翻訳キーを返す。
      *
-     * @param audience 受信するオーディエンス
+     * @return 翻訳キー
      */
-    public static void configReloadSuccess(final Audience audience) {
-        final Component rendered = TranslationRenderer.render("papertemplate.reload.success", audience); // TODO: キーは書き換えてね
-        audience.sendMessage(rendered);
-    }
+    String value();
 }

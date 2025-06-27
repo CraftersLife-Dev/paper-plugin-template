@@ -19,7 +19,7 @@
  */
 package com.github.crafterslife.dev.papertemplate.message;
 
-import com.github.crafterslife.dev.papertemplate.paper.TemplateContext;
+import com.github.crafterslife.dev.papertemplate.paper.TemplateBootstrapContext;
 import com.github.crafterslife.dev.papertemplate.utility.MoreFiles;
 import io.papermc.paper.plugin.bootstrap.BootstrapContext;
 import io.papermc.paper.plugin.configuration.PluginMeta;
@@ -48,21 +48,20 @@ import java.util.stream.Stream;
  * 翻訳可能なシステムメッセージの管理を担う。
  *
  * <p>このクラスは、翻訳可能なシステムメッセージの読み込みや、メッセージファイルの書き込みをおこなう。</p>
- * <p>Note: このクラスのインスタンスが必要な場合は、 {@link TemplateContext#translationManager()} から取得する。</p>
+ * <p>Note: このクラスのインスタンスが必要な場合は、 {@link TemplateBootstrapContext#translationSource()} から取得する。</p>
  */
 // このクラスをシングルトンで設計しなかった理由は、テストを容易にするため
 @SuppressWarnings("UnstableApiUsage")
-public final class TranslationManager {
+public final class TranslationSource {
 
     private static final Locale FALLBACK_LOCALE = Locale.JAPANESE; // 翻訳が見つからなかった場合にフォールバックする言語
 
     private final PluginMeta pluginMeta;
     private final ComponentLogger logger;
     private final Path pluginSource;
-
     private final Path translationsDirectory; // 翻訳メッセージのディレクトリ
-    private final Set<Locale> installedLocales; // 翻訳可能な言語のコレクション
 
+    private final Set<Locale> installedLocales; // 翻訳可能な言語のコレクション
     private @Nullable MiniMessageTranslationStore translationStore; // 翻訳メッセージの格納
 
     /**
@@ -70,7 +69,7 @@ public final class TranslationManager {
      *
      * @param bootstrapContext ブートストラップコンテキスト
      */
-    public TranslationManager(final BootstrapContext bootstrapContext) {
+    public TranslationSource(final BootstrapContext bootstrapContext) {
         this.pluginMeta = bootstrapContext.getPluginMeta();
         this.logger = bootstrapContext.getLogger();
         this.pluginSource = bootstrapContext.getPluginSource();
