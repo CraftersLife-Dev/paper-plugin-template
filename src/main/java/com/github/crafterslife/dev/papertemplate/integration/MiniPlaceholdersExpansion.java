@@ -20,10 +20,9 @@
 package com.github.crafterslife.dev.papertemplate.integration;
 
 import io.github.miniplaceholders.api.MiniPlaceholders;
+import java.util.Objects;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
-
-import java.util.Objects;
 
 /**
  * MiniPlaceholdersのAPIを集約。

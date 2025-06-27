@@ -20,12 +20,6 @@
 package com.github.crafterslife.dev.papertemplate.message;
 
 import com.github.crafterslife.dev.papertemplate.utility.CaseConverter;
-import net.kyori.adventure.audience.Audience;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
-import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
-import org.jspecify.annotations.Nullable;
-
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -33,6 +27,11 @@ import java.lang.reflect.Parameter;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.IntStream;
+import net.kyori.adventure.audience.Audience;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
+import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
+import org.jspecify.annotations.Nullable;
 
 /**
  * TranslationService のメソッド呼び出しを処理する InvocationHandler。

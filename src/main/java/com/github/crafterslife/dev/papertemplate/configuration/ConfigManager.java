@@ -20,6 +20,8 @@
 package com.github.crafterslife.dev.papertemplate.configuration;
 
 import io.papermc.paper.plugin.bootstrap.BootstrapContext;
+import java.nio.file.Path;
+import java.util.Objects;
 import net.kyori.adventure.serializer.configurate4.ConfigurateComponentSerializer;
 import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.text.Component;
@@ -32,9 +34,6 @@ import org.spongepowered.configurate.loader.ConfigurationLoader;
 import org.spongepowered.configurate.loader.HeaderMode;
 import org.spongepowered.configurate.yaml.NodeStyle;
 import org.spongepowered.configurate.yaml.YamlConfigurationLoader;
-
-import java.nio.file.Path;
-import java.util.Objects;
 
 /**
  * 設定ファイルの読み込みや、設定オブジェクトの管理を担う。

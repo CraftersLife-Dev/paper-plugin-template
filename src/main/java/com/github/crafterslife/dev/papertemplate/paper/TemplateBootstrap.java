@@ -28,11 +28,10 @@ import io.papermc.paper.plugin.bootstrap.BootstrapContext;
 import io.papermc.paper.plugin.bootstrap.PluginBootstrap;
 import io.papermc.paper.plugin.bootstrap.PluginProviderContext;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
-import org.bukkit.plugin.java.JavaPlugin;
-import org.jspecify.annotations.Nullable;
-
 import java.util.Objects;
 import java.util.Set;
+import org.bukkit.plugin.java.JavaPlugin;
+import org.jspecify.annotations.Nullable;
 
 // サーバーが読み込まれる前の初期化を担う
 @SuppressWarnings({"UnstableApiUsage", "unused"})

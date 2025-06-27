@@ -20,10 +20,9 @@
 package com.github.crafterslife.dev.papertemplate.paper;
 
 import com.github.crafterslife.dev.papertemplate.paper.event.listeners.ExampleListener;
+import java.util.Set;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import java.util.Set;
 
 public final class TemplatePlugin extends JavaPlugin { // TODO: クラス名は書き換えてね
 

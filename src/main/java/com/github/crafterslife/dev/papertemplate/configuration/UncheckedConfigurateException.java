@@ -19,9 +19,8 @@
  */
 package com.github.crafterslife.dev.papertemplate.configuration;
 
-import org.spongepowered.configurate.ConfigurateException;
-
 import java.io.Serial;
+import org.spongepowered.configurate.ConfigurateException;
 
 /**
  * 設定関連の例外を扱う。

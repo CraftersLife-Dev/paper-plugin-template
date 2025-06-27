@@ -21,7 +21,6 @@ package com.github.crafterslife.dev.papertemplate.paper;
 
 import com.github.crafterslife.dev.papertemplate.configuration.PrimaryConfig;
 import com.github.crafterslife.dev.papertemplate.message.TranslationService;
-
 import java.util.function.Supplier;
 
 /**

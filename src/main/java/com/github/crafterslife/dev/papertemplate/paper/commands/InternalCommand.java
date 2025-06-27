@@ -21,7 +21,6 @@ package com.github.crafterslife.dev.papertemplate.paper.commands;
 
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
-
 import java.util.List;
 
 /**

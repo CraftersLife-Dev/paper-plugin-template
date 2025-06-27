@@ -19,10 +19,9 @@
  */
 package com.github.crafterslife.dev.papertemplate.message;
 
+import java.lang.reflect.InvocationHandler;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
-
-import java.lang.reflect.InvocationHandler;
 
 /**
  * このインターフェースは、アプリケーション全体の翻訳メッセージを定義し、その動的な解決および送信機能を提供する。
