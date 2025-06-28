@@ -75,7 +75,7 @@ public final class TranslationSource {
         this.pluginMeta = bootstrapContext.getPluginMeta();
         this.logger = bootstrapContext.getLogger();
         this.pluginSource = bootstrapContext.getPluginSource();
-        this.translationsDirectory = bootstrapContext.getDataDirectory().resolve("translationService");
+        this.translationsDirectory = bootstrapContext.getDataDirectory().resolve("translations");
         this.installedLocales = ConcurrentHashMap.newKeySet();
 
         try {
@@ -88,6 +88,7 @@ public final class TranslationSource {
     /**
      * 翻訳可能なシステムメッセージをすべて再読み込みする。
      */
+    @SuppressWarnings("PatternValidation")
     public void reloadTranslations() {
         this.logger.info("翻訳を読み込み中...");
 
@@ -98,7 +99,6 @@ public final class TranslationSource {
         }
 
         // メッセージ保管所のインスタンスを生成する。
-        // noinspection PatternValidation
         final Key translationKey = Key.key(this.pluginMeta.getName().toLowerCase(), "messages");
         this.translationStore = MiniMessageTranslationStore.create(translationKey);
         this.translationStore.defaultLocale(FALLBACK_LOCALE);
@@ -149,12 +149,12 @@ public final class TranslationSource {
             // jarはアーカイブファイルなので、一旦展開しなければFiles#listなどは直接使えない
             MoreFiles.walkAsDirectory(this.pluginSource, pathStream -> pathStream
                     .filter(Files::isRegularFile)
-                    .filter(path -> path.toString().startsWith("/translationService/messages_"))
+                    .filter(path -> path.toString().startsWith("/translations/messages_"))
                     .filter(path -> path.toString().endsWith(".properties"))
                     .map(filePath -> new Translation(this.parseLocale(filePath), filePath))
                     .filter(translation -> !this.installedLocales.contains(translation.locale())) // インストール済みロケールはスキップ
                     .forEach(translation -> { // loadFromPluginDirectoryと同じ処理を実行する
-                        final ResourceBundle bundle = ResourceBundle.getBundle("translationService/messages", translation.locale(), UTF8ResourceBundleControl.get());
+                        final ResourceBundle bundle = ResourceBundle.getBundle("translations/messages", translation.locale(), UTF8ResourceBundleControl.get());
                         this.translationStore.registerAll(translation.locale(), bundle, true);
                         this.installedLocales.add(translation.locale());
                         this.copyFrom(translation.path()); // 翻訳ディレクトリへのコピー
