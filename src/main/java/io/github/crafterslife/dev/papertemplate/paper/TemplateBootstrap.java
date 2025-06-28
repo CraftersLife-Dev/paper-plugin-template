@@ -74,7 +74,7 @@ public final class TemplateBootstrap implements PluginBootstrap { // TODO: ク�
      */
     private void initializeResources(final BootstrapContext bootstrapContext) throws IllegalStateException {
         // このメソッドが2回以上呼ばれるようなことがあれば例外
-        if (Objects.isNull(this.configManager) || Objects.isNull(this.translationSource) || Objects.isNull(this.templateContext)) {
+        if (Objects.nonNull(this.configManager) || Objects.nonNull(this.translationSource) || Objects.nonNull(this.templateContext)) {
             throw new IllegalStateException("リソースはすでに初期化済み");
         }
 
