@@ -12,7 +12,7 @@ minecraft = "1.21.4"
 paper-api = "1.21.4-R0.1-SNAPSHOT"
 mini-placeholders = "2.3.0"
 configurate = "4.2.0"
-adventure-serializer-configurate = "4.23.0"
+adventure-serializer-configurate = "4.24.0"
 
 [libraries]
 paper-api = { group = "io.papermc.paper", name = "paper-api", version.ref = "paper-api" }
