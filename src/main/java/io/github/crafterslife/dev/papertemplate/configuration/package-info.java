@@ -1,7 +1,4 @@
 /**
- * 設定の管理や設定ファイルの読み書きなどに関連するクラス群
+ * 設定に関連するクラスを提供します。
  */
-@NullMarked
 package io.github.crafterslife.dev.papertemplate.configuration;
-
-import org.jspecify.annotations.NullMarked;

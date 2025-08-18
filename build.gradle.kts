@@ -20,36 +20,34 @@ java {
 
 dependencies {
     // Paper
-    compileOnly(libs.paper.api) {
-        exclude("net.md-5") // すごい邪魔
-    }
+    compileOnly(libs.paper.api)
 
     // Integrations
     compileOnly(libs.mini.placeholders)
 
     // Libraries
-    compileOnly(libs.configurate.yaml) // Paperに組み込んであるためダウンロードは不要
+    compileOnly(libs.configurate.yaml) // Paperに組み込んである
     runtimeDownload(libs.adventure.serializer.configurate)
+    implementation(libs.doburoku.standard)
+
+    // Annotation processor
+    annotationProcessor(libs.doburoku.annotation.processor)
 }
 
-val mainPackage = "$group.${rootProject.name.lowercase()}"
+val mainPackage = "$group.papertemplate" // TODO: パッケージ名を変更
 paperPluginYaml {
-    name = rootProject.name
-    author = "Namiu/うにたろう" // TODO: 自分の名前に変えてね
+    name = "PaperTemplate" // TODO: プラグイン名を変更
+    author = "Namiu (うにたろう)" // TODO: 自分の名前に変更
     website = "https://github.com/CraftersLife-Dev"
     apiVersion = "1.21"
 
-    main = "$mainPackage.paper.TemplatePlugin" // TODO: JavaPluginの具象クラス名に変えてね
-    bootstrapper = "$mainPackage.paper.TemplateBootstrap" // TODO: PluginBootstrapの具象クラス名に変えてね
-    loader = "$mainPackage.paper.TemplateLoader" // TODO: PluginLoaderの具象クラス名に変えてね
+    main = "$mainPackage.minecraft.paper.JavaPluginImpl"
+    bootstrapper = "$mainPackage.minecraft.paper.PluginBootstrapImpl"
+    loader = "$mainPackage.minecraft.paper.PluginLoaderImpl"
 
     permissions {
-        register("${rootProject.name.lowercase()}.command.admin") {
+        register("${paperPluginYaml.name.get().lowercase()}.command.admin") {
             description = "${paperPluginYaml.name}の管理者系コマンド"
-            default = Permission.Default.OP
-        }
-        register("${rootProject.name.lowercase()}.command.admin.reload") {
-            description = "${paperPluginYaml.name}の設定を再読み込みするコマンド"
             default = Permission.Default.OP
         }
     }
@@ -62,7 +60,7 @@ paperPluginYaml {
 
 indraSpotlessLicenser {
     licenseHeaderFile(rootProject.file("LICENSE_HEADER"))
-    property("name", rootProject.name)
+    property("name", paperPluginYaml.name)
     property("author", paperPluginYaml.author)
     property("contributors", paperPluginYaml.contributors)
 }
@@ -75,11 +73,11 @@ configurations {
 
 tasks {
     compileJava {
-        // TranslationServiceの変数名を保存してTranslationServiceHandlerで参照するために必要。
         options.compilerArgs.add("-parameters")
     }
 
     shadowJar {
+        archiveBaseName = paperPluginYaml.name
         archiveClassifier = null as String?
         gremlin {
             listOf("xyz.jpenilla.gremlin")
@@ -93,10 +91,10 @@ tasks {
         // runディレクトリの中にlog4j2.xmlを突っ込むとログの設定を変更可能
         // Paper: https://github.com/PaperMC/Paper/blob/main/paper-server/src/main/resources/log4j2.xml
         systemProperty("log4j.configurationFile", "log4j2.xml")
-        minecraftVersion(libs.versions.minecraft.get())
+        minecraftVersion("1.21.8")
         downloadPlugins {
             modrinth("luckperms", "v5.5.0-bukkit")
-            modrinth("miniplaceholders", "wck4v0R0")
+            url("https://ci.codemc.io/job/MiniPlaceholders/job/MiniPlaceholders/14/artifact/jar/MiniPlaceholders-Paper-2.3.1-SNAPSHOT.jar")
             modrinth("miniplaceholders-placeholderapi-expansion", "1.2.0")
             hangar("PlaceholderAPI", "2.11.6")
         }

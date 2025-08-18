@@ -8,17 +8,19 @@ gremlin = "0.0.8"
 indra-licenser-spotless = "3.1.3"
 
 # Java
-minecraft = "1.21.4"
-paper-api = "1.21.4-R0.1-SNAPSHOT"
+paper-api = "1.21.5-R0.1-SNAPSHOT"
 mini-placeholders = "2.3.0"
 configurate = "4.2.0"
 adventure-serializer-configurate = "4.23.0"
+doburoku = "1.0.0-SNAPSHOT"
 
 [libraries]
 paper-api = { group = "io.papermc.paper", name = "paper-api", version.ref = "paper-api" }
 mini-placeholders = { group = "io.github.miniplaceholders", name = "miniplaceholders-api", version.ref = "mini-placeholders" }
 configurate-yaml = { group = "org.spongepowered", name = "configurate-yaml", version.ref = "configurate" }
 adventure-serializer-configurate = { group = "net.kyori", name = "adventure-serializer-configurate4", version.ref = "adventure-serializer-configurate" }
+doburoku-standard = { group = "io.github.namiuni", name = "doburoku-standard", version.ref = "doburoku"}
+doburoku-annotation-processor = { group = "io.github.namiuni", name = "doburoku-annotation-processor", version.ref = "doburoku"}
 
 [plugins]
 shadow = { id = "com.gradleup.shadow", version.ref = "shadow" }

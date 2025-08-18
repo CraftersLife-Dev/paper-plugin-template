@@ -1,7 +1,7 @@
 /*
  * PaperTemplate
  *
- * Copyright (c) 2025. Namiu/うにたろう
+ * Copyright (c) 2025. Namiu (うにたろう)
  *                     Contributors []
  *
  * This program is free software: you can redistribute it and/or modify
@@ -20,39 +20,28 @@
 package io.github.crafterslife.dev.papertemplate.configuration;
 
 import java.io.Serial;
+import org.jspecify.annotations.NullMarked;
 import org.spongepowered.configurate.ConfigurateException;
 
 /**
- * 設定関連の例外を扱う。
+ * <p>{@link ConfigurateException}をラップし、チェックされない例外として扱うためのランタイム例外です。</p>
  *
- * <p>このクラスは、{@link ConfigurateException} を {@link RuntimeException} でラップしただけのクラスである。
- * プレイヤーがreloadコマンドを実行して例外が発生した場合に、エラーメッセージをプレイヤーへ送信するためのもの。</p>
- * <p>Note: 例外処理を {@link ConfigManager} クラス内で完結してしまうとエラーメッセージをログにしか残せないため、
- * 例外発生をプレイヤーへ知らせる手段がなくなる。例外をプレイヤーへ知らせないと壊れた設定のままプラグインが動作することに繋がりかねない。</p>
+ * <p>このクラスは、{@code ConfigurateException}がチェックされる例外であるために、
+ * 呼び出し元で強制的に{@code try-catch}ブロックを記述する必要があるのを避けるために使用されます。
+ * これにより、{@code ConfigurateHelper}のようなユーティリティクラスをより簡潔に使用できるようになります。</p>
  */
-// Note: ただのラッパークラスだし誰も使わないと思うので詳細なJavadocは省略
-@SuppressWarnings("unused")
-final class UncheckedConfigurateException extends RuntimeException {
+@NullMarked
+public final class UncheckedConfigurateException extends RuntimeException {
+
     @Serial
-    private static final long serialVersionUID = -3277407553778580668L;
+    private static final long serialVersionUID = -2214743499979182898L;
 
-    UncheckedConfigurateException() {
-
-    }
-
-    UncheckedConfigurateException(final String message) {
-        super(message);
-    }
-
-    UncheckedConfigurateException(final ConfigurateException cause) {
+    /**
+     * 指定された{@link ConfigurateException}を原因として、新しい{@code UncheckedConfigurateException}を構築します。
+     *
+     * @param cause この例外の原因となる{@link ConfigurateException}
+     */
+    public UncheckedConfigurateException(final ConfigurateException cause) {
         super(cause);
-    }
-
-    UncheckedConfigurateException(final String message, final ConfigurateException cause) {
-        super(message, cause);
-    }
-
-    UncheckedConfigurateException(final String message, final ConfigurateException cause, final boolean enableSuppression, final boolean writableStackTrace) {
-        super(message, cause, enableSuppression, writableStackTrace);
     }
 }
