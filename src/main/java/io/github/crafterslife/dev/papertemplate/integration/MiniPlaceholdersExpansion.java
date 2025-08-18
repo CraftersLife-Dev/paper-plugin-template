@@ -1,7 +1,7 @@
 /*
  * PaperTemplate
  *
- * Copyright (c) 2025. Namiu/うにたろう
+ * Copyright (c) 2025. Namiu (うにたろう)
  *                     Contributors []
  *
  * This program is free software: you can redistribute it and/or modify
@@ -20,51 +20,46 @@
 package io.github.crafterslife.dev.papertemplate.integration;
 
 import io.github.miniplaceholders.api.MiniPlaceholders;
-import java.util.Objects;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
+import org.bukkit.Bukkit;
+import org.jspecify.annotations.NullMarked;
 
 /**
- * MiniPlaceholdersのAPIを集約。
+ * <p>MiniPlaceholdersプラグインとの連携を管理するためのユーティリティクラスです。</p>
  *
- * <p>このクラスは、 {@link MiniPlaceholders} に破壊的な変更が加えられた場合でも、
- * 柔軟に対応するためのラッパークラスである。</p>
+ * <p>このクラスは、MiniPlaceholdersがサーバーにロードされているかどうかを確認し、
+ * それに応じて適切な{@link TagResolver}を提供します。これにより、MiniPlaceholdersが
+ * 存在しない場合でも安全にプレースホルダーを使用できます。</p>
  */
+@NullMarked
 public final class MiniPlaceholdersExpansion {
 
-    private static byte miniPlaceholdersLoaded = -1;
-
+    /**
+     * このユーティリティクラスのインスタンス化を防ぐためのプライベートコンストラクタ。
+     */
     private MiniPlaceholdersExpansion() {
-
     }
 
     /**
-     * MiniPlaceholdersが読み込まれているかどうかを確認する。
+     * MiniPlaceholdersプラグインがサーバーにロードされているかを確認します。
      *
-     * @return MiniMessageが読み込まれていればtrue
+     * @return MiniPlaceholdersが有効なプラグインとしてロードされていれば{@code true}
      */
     private static boolean miniPlaceholdersLoaded() {
-        if (miniPlaceholdersLoaded == -1) {
-            try {
-                final String name = MiniPlaceholders.class.getName();
-                Objects.requireNonNull(name);
-                miniPlaceholdersLoaded = 1;
-            } catch (final NoClassDefFoundError __) {
-                miniPlaceholdersLoaded = 0;
-            }
-        }
-        return miniPlaceholdersLoaded == 1;
+        return Bukkit.getPluginManager().isPluginEnabled("MiniPlaceholders");
     }
 
     /**
-     * グローバル・プレースホルダーに基づいてTagResolverを取得する。
+     * グローバルなプレースホルダーに基づいて{@link TagResolver}を取得します。
      *
-     * <p>MiniPlaceholdersが読み込まれている場合はグローバル・プレースホルダーを返すが、
-     * 読み込まれていない場合は空っぽのTagResolverを返す。</p>
+     * <p>MiniPlaceholdersがロードされている場合は、{@link MiniPlaceholders#getGlobalPlaceholders()}
+     * によって取得されるグローバルプレースホルダーを返します。ロードされていない場合は、
+     * 何も解決しない空の{@link TagResolver}を返します。</p>
      *
-     * @return グローバル・プレースホルダーに基づいたTagResolver
+     * @return グローバルプレースホルダーに基づいた{@link TagResolver}
      */
-    public static TagResolver globalPlaceholders() {
+    public static TagResolver getGlobalPlaceholders() {
         if (MiniPlaceholdersExpansion.miniPlaceholdersLoaded()) {
             return MiniPlaceholders.getGlobalPlaceholders();
         }
@@ -73,15 +68,16 @@ public final class MiniPlaceholdersExpansion {
     }
 
     /**
-     * オーディエンス、およびグローバルのプレースホルダーに基づいてTagResolverを取得する。
+     * 特定のオーディエンスとグローバルプレースホルダーに基づいて{@link TagResolver}を取得します。
      *
-     * <p>MiniPlaceholdersが読み込まれている場合は、オーディエンス、およびグローバルのプレースホルダーを返すが、
-     * 読み込まれていない場合は空っぽのTagResolverを返す。</p>
+     * <p>MiniPlaceholdersがロードされている場合は、{@link MiniPlaceholders#getAudienceGlobalPlaceholders(Audience)}
+     * によって取得されるオーディエンスおよびグローバルプレースホルダーを返します。ロードされていない場合は、
+     * 何も解決しない空の{@link TagResolver}を返します。</p>
      *
-     * @param audience 検証するオーディエンス
-     * @return オーディエンス、およびグローバルのプレースホルダーに基づいたTagResolver
+     * @param audience プレースホルダーを解決するために使用されるオーディエンス
+     * @return オーディエンスおよびグローバルプレースホルダーに基づいた{@link TagResolver}
      */
-    public static TagResolver audiencePlaceholders(final Audience audience) {
+    public static TagResolver getAudiencePlaceholders(final Audience audience) {
         if (MiniPlaceholdersExpansion.miniPlaceholdersLoaded()) {
             return MiniPlaceholders.getAudienceGlobalPlaceholders(audience);
         }
