@@ -11,7 +11,7 @@ indra-licenser-spotless = "3.1.3"
 paper-api = "1.21.5-R0.1-SNAPSHOT"
 mini-placeholders = "2.3.0"
 configurate = "4.2.0"
-adventure-serializer-configurate = "4.23.0"
+adventure-serializer-configurate = "4.24.0"
 doburoku = "1.0.0-SNAPSHOT"
 
 [libraries]
