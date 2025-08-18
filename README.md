@@ -5,8 +5,6 @@ CraftersLifeの未来ある若者のために作った高機能テンプレー�
 
 ## Gradle プラグイン
 
----
-
 ### [indra licenser spotless](https://github.com/KyoriPowered/indra/wiki/indra-licenser-spotless)
 
 - **概要**: 全クラスのソースコードに一括でライセンスヘッダーを挿入
@@ -38,8 +36,6 @@ CraftersLifeの未来ある若者のために作った高機能テンプレー�
   - 波括弧のインデントを揃える人間はストレスで病む
 
 ## Java ライブラリ
-
----
 
 ### [Paper API](https://docs.papermc.io/paper/dev/getting-started/paper-plugins)
 
@@ -78,8 +74,6 @@ CraftersLifeの未来ある若者のために作った高機能テンプレー�
 
 ## 使い方
 
----
-
 `ResourceContainer`でリソースを管理し、`ServiceContainer`でビジネスロジックを管理する。イベントリスナーやコマンド内にビジネスロジックを直接書かない。
 
 - 設定は`PrimaryConfig`にコンポーネントを追加する
@@ -91,8 +85,6 @@ CraftersLifeの未来ある若者のために作った高機能テンプレー�
   - メソッドの引数は`ComponentLike`でなければ`Object#toString`を呼び出したあとに`Component.text(String)`でラップされる。不都合があればリゾルバ―を自分で登録する
 
 ## おわりに
-
----
 
 このREADMEが、CraftersLifeのPaperプラグイン開発の参考として役立つことを願っています。
 不明点や改善案などがあればフィードバックをくれ～
