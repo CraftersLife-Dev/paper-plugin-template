@@ -31,7 +31,6 @@ import io.github.crafterslife.dev.papertemplate.translation.TranslationStoreInit
 import io.github.crafterslife.dev.papertemplate.translation.annotations.LogLevel;
 import io.github.crafterslife.dev.papertemplate.translation.services.LoggingService;
 import io.github.crafterslife.dev.papertemplate.translation.services.MessageService;
-import io.github.namiuni.doburoku.spi.argument.ArgumentResolverRegistry;
 import io.github.namiuni.doburoku.standard.DoburokuStandard;
 import io.github.namiuni.doburoku.standard.argument.MiniMessageArgumentTransformer;
 import io.leangen.geantyref.TypeToken;
@@ -122,7 +121,7 @@ public record ResourceContainer(
         );
 
         final ComponentLogger logger = context.getLogger();
-        return DoburokuStandard.builder(LoggingService.class)
+        return DoburokuStandard.of(LoggingService.class)
                 .argument(registry -> {
                     registry.plus(new TypeToken<Collection<Locale>>() {
                     }, (parameter, locales) -> {
@@ -158,9 +157,8 @@ public record ResourceContainer(
         );
         loggingService.translationLoaded(installedLocales.size(), installedLocales);
 
-        return DoburokuStandard.builder(MessageService.class)
-                .argument((ArgumentResolverRegistry registry) -> registry
-                                .plus(Player.class, (parameter, player) -> player.displayName()),
+        return DoburokuStandard.of(MessageService.class)
+                .argument(registry -> registry.plus(Player.class, (parameter, player) -> player.displayName()),
                         MiniMessageArgumentTransformer.create())
                 .result(registry -> registry
                         .plus(Message.class, (method, component) -> audience -> {
