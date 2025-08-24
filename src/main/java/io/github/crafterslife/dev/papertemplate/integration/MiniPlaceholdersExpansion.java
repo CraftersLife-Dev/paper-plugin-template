@@ -20,7 +20,6 @@
 package io.github.crafterslife.dev.papertemplate.integration;
 
 import io.github.miniplaceholders.api.MiniPlaceholders;
-import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.bukkit.Bukkit;
 import org.jspecify.annotations.NullMarked;
@@ -51,35 +50,17 @@ public final class MiniPlaceholdersExpansion {
     }
 
     /**
-     * グローバルなプレースホルダーに基づいて{@link TagResolver}を取得します。
-     *
-     * <p>MiniPlaceholdersがロードされている場合は、{@link MiniPlaceholders#getGlobalPlaceholders()}
-     * によって取得されるグローバルプレースホルダーを返します。ロードされていない場合は、
-     * 何も解決しない空の{@link TagResolver}を返します。</p>
-     *
-     * @return グローバルプレースホルダーに基づいた{@link TagResolver}
-     */
-    public static TagResolver getGlobalPlaceholders() {
-        if (MiniPlaceholdersExpansion.miniPlaceholdersLoaded()) {
-            return MiniPlaceholders.getGlobalPlaceholders();
-        }
-
-        return TagResolver.empty();
-    }
-
-    /**
      * 特定のオーディエンスとグローバルプレースホルダーに基づいて{@link TagResolver}を取得します。
      *
-     * <p>MiniPlaceholdersがロードされている場合は、{@link MiniPlaceholders#getAudienceGlobalPlaceholders(Audience)}
+     * <p>MiniPlaceholdersがロードされている場合は、{@link MiniPlaceholders#audienceGlobalPlaceholders()}
      * によって取得されるオーディエンスおよびグローバルプレースホルダーを返します。ロードされていない場合は、
      * 何も解決しない空の{@link TagResolver}を返します。</p>
      *
-     * @param audience プレースホルダーを解決するために使用されるオーディエンス
      * @return オーディエンスおよびグローバルプレースホルダーに基づいた{@link TagResolver}
      */
-    public static TagResolver getAudiencePlaceholders(final Audience audience) {
+    public static TagResolver audiencePlaceholders() {
         if (MiniPlaceholdersExpansion.miniPlaceholdersLoaded()) {
-            return MiniPlaceholders.getAudienceGlobalPlaceholders(audience);
+            return MiniPlaceholders.audienceGlobalPlaceholders();
         }
 
         return TagResolver.empty();
