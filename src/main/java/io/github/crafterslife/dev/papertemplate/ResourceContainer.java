@@ -162,12 +162,11 @@ public record ResourceContainer(
                         MiniMessageArgumentTransformer.create())
                 .result(registry -> registry
                         .plus(Message.class, (method, component) -> audience -> {
-                            final List<ComponentLike> argumentsList = new ArrayList<>(component.arguments());
-                            argumentsList.add(Argument.tagResolver(MiniPlaceholdersExpansion.getAudiencePlaceholders(audience)));
+                            final List<ComponentLike> arguments = new ArrayList<>(component.arguments());
+                            arguments.add(Argument.tagResolver(MiniPlaceholdersExpansion.audiencePlaceholders()));
+                            arguments.add(Argument.target(audience));
 
-                            final ComponentLike[] arguments = argumentsList.toArray(ComponentLike[]::new);
                             final TranslatableComponent result = Component.translatable(component.key(), arguments);
-
                             audience.sendMessage(result);
                         }))
                 .brew();
