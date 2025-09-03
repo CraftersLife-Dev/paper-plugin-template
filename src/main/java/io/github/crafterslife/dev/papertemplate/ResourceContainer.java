@@ -162,10 +162,13 @@ public record ResourceContainer(
                         MiniMessageArgumentTransformer.create())
                 .result(registry -> registry
                         .plus(Message.class, (method, component) -> audience -> {
+
+                            // MiniPlaceholdersのプレースホルダーと解決に必要なオーディエンスを追加
                             final List<ComponentLike> arguments = new ArrayList<>(component.arguments());
                             arguments.add(Argument.tagResolver(MiniPlaceholdersExpansion.audiencePlaceholders()));
                             arguments.add(Argument.target(audience));
 
+                            // TranslatableComponentを生成してオーディエンスに送信
                             final TranslatableComponent result = Component.translatable(component.key(), arguments);
                             audience.sendMessage(result);
                         }))

@@ -94,8 +94,7 @@ tasks {
         minecraftVersion("1.21.8")
         downloadPlugins {
             modrinth("luckperms", "v5.5.0-bukkit")
-            url("https://ci.codemc.io/job/MiniPlaceholders/job/MiniPlaceholders/14/artifact/jar/MiniPlaceholders-Paper-2.3.1-SNAPSHOT.jar")
-            modrinth("miniplaceholders-placeholderapi-expansion", "1.2.0")
+            modrinth("miniplaceholders", "MU3nkszR")
             hangar("PlaceholderAPI", "2.11.6")
         }
     }
