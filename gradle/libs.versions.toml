@@ -8,19 +8,20 @@ gremlin = "0.0.9"
 indra-licenser-spotless = "3.2.0"
 
 # Java
-paper-api = "1.21.5-R0.1-SNAPSHOT"
+paper-api = "1.21.10-R0.1-SNAPSHOT"
 mini-placeholders = "3.0.1"
 configurate = "4.2.0"
 adventure-serializer-configurate = "4.24.0"
-doburoku = "1.0.0-SNAPSHOT"
+kotonoha = "0.1.0-SNAPSHOT"
 
 [libraries]
 paper-api = { group = "io.papermc.paper", name = "paper-api", version.ref = "paper-api" }
 mini-placeholders = { group = "io.github.miniplaceholders", name = "miniplaceholders-api", version.ref = "mini-placeholders" }
 configurate-yaml = { group = "org.spongepowered", name = "configurate-yaml", version.ref = "configurate" }
 adventure-serializer-configurate = { group = "net.kyori", name = "adventure-serializer-configurate4", version.ref = "adventure-serializer-configurate" }
-doburoku-standard = { group = "io.github.namiuni", name = "doburoku-standard", version.ref = "doburoku"}
-doburoku-annotation-processor = { group = "io.github.namiuni", name = "doburoku-annotation-processor", version.ref = "doburoku"}
+kotonoha-translatable-message = { group = "io.github.namiuni", name = "kotonoha-translatable-message", version.ref = "kotonoha"}
+kotonoha-translatable-message-extra-miniplaceholders = { group = "io.github.namiuni", name = "kotonoha-translatable-message-extra-miniplaceholders", version.ref = "kotonoha"}
+kotonoha-resourcebundle-generator-processor = { group = "io.github.namiuni", name = "kotonoha-resourcebundle-generator-processor", version.ref = "kotonoha"}
 
 [plugins]
 shadow = { id = "com.gradleup.shadow", version.ref = "shadow" }
