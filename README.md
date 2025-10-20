@@ -64,27 +64,10 @@ CraftersLifeの未来ある若者のために作った高機能テンプレー�
   - 他プラグインに提供するタグを登録可能
   - [PlaceholderAPI拡張](https://modrinth.com/plugin/miniplaceholders-placeholderapi-expansion)もあるよ
 
-### [Doburoku](https://github.com/NamiUni/doburoku)
+### [Kotonoha](https://github.com/NamiUni/kotonoha)
 
-- **概要**: 翻訳をDRYに管理できるライブラリ
+- **概要**: メッセージをDRYに管理できるライブラリ
 - **メリット**:
     - インターフェースを定義するだけでリソースバンドルを生成可能
-    - 引数をComponentLikeに解決する機能
-    - 生成されたTranslatableComponentを戻り値に応じて操作してから返却する機能
+    - インターフェースのプロキシインスタンスを生成可能
 
-## 使い方
-
-`ResourceContainer`でリソースを管理し、`ServiceContainer`でビジネスロジックを管理する。イベントリスナーやコマンド内にビジネスロジックを直接書かない。
-
-- 設定は`PrimaryConfig`にコンポーネントを追加する
-  - 追加したコンポーネントは生成済みの設定ファイルには自動適用されないため、設定ファイルに反映したい場合は一度削除する必要あり
-  - コンポーネントは[このページ](https://github.com/SpongePowered/Configurate/wiki/Type-Serializers)に存在する型であればシリアライズ可能。なければシリアライザーを自分で登録する必要あり
-- 翻訳は`MessageService`か`LogggingService`に追加する
-  - `MessageService`はプレイヤーなどに送信するメッセージ
-  - `LoggingService`はログに記録するメッセージ
-  - メソッドの引数は`ComponentLike`でなければ`Object#toString`を呼び出したあとに`Component.text(String)`でラップされる。不都合があればリゾルバ―を自分で登録する
-
-## おわりに
-
-このREADMEが、CraftersLifeのPaperプラグイン開発の参考として役立つことを願っています。
-不明点や改善案などがあればフィードバックをくれ～
