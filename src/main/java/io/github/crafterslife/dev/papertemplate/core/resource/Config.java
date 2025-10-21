@@ -27,8 +27,8 @@ import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 /**
  * プラグインの設定ファイルをマッピングするためのクラス
  */
-//Note: 1. フィールドはfinalにはしない。
-//      2. メソッドで値を取得する。
+//Note: 1. フィールドはfinalにはしない
+//      2. 値はメソッドから取得する
 @NullMarked
 @SuppressWarnings("FieldMayBeFinal")
 @ConfigSerializable

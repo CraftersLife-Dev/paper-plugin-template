@@ -57,7 +57,7 @@ record ConfigurationMetadata(String fileName, String headerText) {
             throw new IllegalArgumentException(message);
         }
 
-        // クラスに付与された@Headerアノテーションの値から設定のヘッダーを取得
+        // クラスに付与された@ConfigHeaderアノテーションの値から設定のヘッダーを取得
         final ConfigHeader headerAnnotation = configClass.getAnnotation(ConfigHeader.class);
         if (headerAnnotation == null) {
             final String className = configClass.getName();
