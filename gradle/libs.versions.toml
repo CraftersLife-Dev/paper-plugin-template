@@ -9,7 +9,7 @@ indra-licenser-spotless = "3.2.0"
 
 # Java
 paper-api = "1.21.10-R0.1-SNAPSHOT"
-mini-placeholders = "3.0.1"
+mini-placeholders = "3.1.0"
 configurate = "4.2.0"
 adventure-serializer-configurate = "4.24.0"
 kotonoha = "0.1.0-SNAPSHOT"
