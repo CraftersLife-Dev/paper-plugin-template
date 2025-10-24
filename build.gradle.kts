@@ -28,11 +28,9 @@ dependencies {
     // Libraries
     compileOnly(libs.configurate.yaml) // Paperに組み込んである
     runtimeDownload(libs.adventure.serializer.configurate)
-    implementation(libs.kotonoha.translatable.message)
-    implementation(libs.kotonoha.translatable.message.extra.miniplaceholders)
-
-    // Annotation processor
-    annotationProcessor(libs.kotonoha.resourcebundle.generator.processor)
+    implementation(libs.kotonoha.message)
+    implementation(libs.kotonoha.message.extra.miniplaceholders)
+    implementation(libs.kotonoha.translator)
 }
 
 val mainPackage = "io.github.crafterslife.dev.papertemplate" // TODO: パッケージ名を変更 (実際のパッケージ名も変更を忘れないように！)

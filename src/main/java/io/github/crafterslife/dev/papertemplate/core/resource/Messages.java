@@ -19,10 +19,10 @@
  */
 package io.github.crafterslife.dev.papertemplate.core.resource;
 
+import io.github.crafterslife.dev.papertemplate.infrastructure.translation.TranslationStoreName;
 import io.github.namiuni.kotonoha.annotations.Key;
 import io.github.namiuni.kotonoha.annotations.Locales;
 import io.github.namiuni.kotonoha.annotations.Message;
-import io.github.namiuni.kotonoha.annotations.ResourceBundle;
 import io.github.namiuni.kotonoha.translatable.message.extra.miniplaceholders.PlaceholderScope;
 import io.github.namiuni.kotonoha.translatable.message.extra.miniplaceholders.WithPlaceholders;
 import net.kyori.adventure.text.Component;
@@ -34,7 +34,7 @@ import org.jspecify.annotations.NullMarked;
  */
 @NullMarked
 @ApiStatus.NonExtendable
-@ResourceBundle(baseName = "translations/messages")
+@TranslationStoreName(namespace = "template", value = "messages") // TODO: templateを変更
 public interface Messages {
 
     /**

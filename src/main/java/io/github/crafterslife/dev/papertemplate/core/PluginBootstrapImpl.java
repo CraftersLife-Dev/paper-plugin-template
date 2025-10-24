@@ -24,7 +24,7 @@ import io.github.crafterslife.dev.papertemplate.core.commands.BaseCommand;
 import io.github.crafterslife.dev.papertemplate.core.resource.Config;
 import io.github.crafterslife.dev.papertemplate.core.resource.Messages;
 import io.github.crafterslife.dev.papertemplate.infrastructure.configuration.ConfigurationHolder;
-import io.github.crafterslife.dev.papertemplate.infrastructure.translation.TranslationHolder;
+import io.github.crafterslife.dev.papertemplate.infrastructure.translation.TranslationMessageFactory;
 import io.papermc.paper.plugin.bootstrap.BootstrapContext;
 import io.papermc.paper.plugin.bootstrap.PluginBootstrap;
 import io.papermc.paper.plugin.bootstrap.PluginProviderContext;
@@ -43,7 +43,7 @@ import org.jspecify.annotations.NullMarked;
 public final class PluginBootstrapImpl implements PluginBootstrap {
 
     private @MonotonicNonNull ConfigurationHolder<Config> configHolder;
-    private @MonotonicNonNull TranslationHolder<Messages> translationHolder;
+    private @MonotonicNonNull Messages messages;
 
     @ApiStatus.Internal
     public PluginBootstrapImpl() {
@@ -55,19 +55,19 @@ public final class PluginBootstrapImpl implements PluginBootstrap {
         // 設定ホルダーを生成
         this.configHolder = ConfigurationHolder.from(Config.class, context);
 
-        // 翻訳ホルダーを生成
-        this.translationHolder = TranslationHolder.from(Messages.class, context);
+        // メッセージサービスを生成
+        this.messages = TranslationMessageFactory.from(Messages.class, context);
 
         // コマンドを登録
         final LifecycleEventManager<BootstrapContext> lifecycleManager = context.getLifecycleManager();
         lifecycleManager.registerEventHandler(LifecycleEvents.COMMANDS, event -> {
-            final BaseCommand adminCommand = new AdminCommand(this.configHolder, this.translationHolder);
+            final BaseCommand adminCommand = new AdminCommand(this.configHolder, this.messages);
             event.registrar().register(adminCommand.node(), adminCommand.description(), adminCommand.aliases());
         });
     }
 
     @Override
     public JavaPlugin createPlugin(final PluginProviderContext context) {
-        return new JavaPluginImpl(this.configHolder, this.translationHolder.getMessageService());
+        return new JavaPluginImpl(this.configHolder, this.messages);
     }
 }

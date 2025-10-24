@@ -25,7 +25,6 @@ import io.github.crafterslife.dev.papertemplate.core.resource.Config;
 import io.github.crafterslife.dev.papertemplate.core.resource.Messages;
 import io.github.crafterslife.dev.papertemplate.core.resource.Permissions;
 import io.github.crafterslife.dev.papertemplate.infrastructure.configuration.ConfigurationHolder;
-import io.github.crafterslife.dev.papertemplate.infrastructure.translation.TranslationHolder;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
 import net.kyori.adventure.text.Component;
@@ -39,20 +38,20 @@ import org.jspecify.annotations.NullMarked;
 public final class AdminCommand implements BaseCommand {
 
     private final ConfigurationHolder<Config> configHolder;
-    private final TranslationHolder<Messages> translationHolder;
+    private final Messages messages;
 
     /**
      * このクラスの新しいインスタンスを生成する。
      *
      * @param configHolder      設定ホルダー
-     * @param translationHolder 翻訳ホルダー
+     * @param messages 翻訳メッセージ
      */
     public AdminCommand(
             final ConfigurationHolder<Config> configHolder,
-            final TranslationHolder<Messages> translationHolder
+            final Messages messages
     ) {
         this.configHolder = configHolder;
-        this.translationHolder = translationHolder;
+        this.messages = messages;
     }
 
     /**
@@ -72,14 +71,11 @@ public final class AdminCommand implements BaseCommand {
                 .requires(source -> source.getSender().hasPermission(Permissions.COMMAND_RELOAD))
                 .executes(context -> {
 
-                    this.configHolder.reloadConfig(); // 設定を再読み込み
-                    this.translationHolder.reloadTranslator(); // 翻訳を再読み込み
-
-                    // 再読み込み成功メッセージを取得
-                    final Messages messages = this.translationHolder.getMessageService();
-                    final Component reloadedMessage = messages.configReloadSuccess();
+                    // 設定を再読み込み
+                    this.configHolder.reloadConfig();
 
                     // 再読み込み成功メッセージを送信
+                    final Component reloadedMessage = this.messages.configReloadSuccess();
                     final CommandSender sender = context.getSource().getSender();
                     sender.sendMessage(reloadedMessage);
 

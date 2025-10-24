@@ -19,28 +19,46 @@
  */
 package io.github.crafterslife.dev.papertemplate.infrastructure.translation;
 
-import io.github.namiuni.kotonoha.translatable.message.KotonohaMessages;
+import io.github.namiuni.kotonoha.translatable.message.KotonohaMessage;
 import io.github.namiuni.kotonoha.translatable.message.configuration.FormatTypes;
 import io.github.namiuni.kotonoha.translatable.message.configuration.InvocationConfiguration;
 import io.github.namiuni.kotonoha.translatable.message.extra.miniplaceholders.MiniPlaceholdersArgumentPolicy;
 import io.github.namiuni.kotonoha.translatable.message.policy.argument.TranslationArgumentAdaptationPolicy;
 import io.github.namiuni.kotonoha.translatable.message.policy.argument.tag.TagNameResolver;
 import io.github.namiuni.kotonoha.translatable.message.utility.TranslationArgumentAdapter;
+import io.papermc.paper.plugin.bootstrap.BootstrapContext;
+import net.kyori.adventure.translation.GlobalTranslator;
+import net.kyori.adventure.translation.Translator;
 import org.jspecify.annotations.NullMarked;
 
+/**
+ * 翻訳ソースを初期化し、メッセージインターフェースのプロキシインスタンスを生成するためのクラス。
+ */
 @NullMarked
 @SuppressWarnings("UnstableApiUsage")
-final class KotonohaMessagesFactory {
+public final class TranslationMessageFactory {
 
-    private KotonohaMessagesFactory() {
+    private TranslationMessageFactory() {
     }
 
-    public static <I> I from(final Class<I> messageInterface) {
+    /**
+     * メッセージインターフェースのプロキシインスタンスを生成して返す。
+     *
+     * @param <I>              メッセージインターフェースの型
+     * @param messageInterface メッセージインターフェース
+     * @param context          プラグインの起動時に提供されるコンテキスト
+     * @return メッセージインターフェースのプロキシインスタンス
+     */
+    public static <I> I from(final Class<I> messageInterface, final BootstrapContext context) {
 
-        final InvocationConfiguration config = FormatTypes.MINI_MESSAGE.configure()
+        final Translator translator = TranslatorFactory.from(messageInterface);
+        GlobalTranslator.translator().addSource(translator);
+        context.getLogger().info("翻訳を読み込みました。");
+
+        final InvocationConfiguration invocationConfiguration = FormatTypes.MINI_MESSAGE
                 .withArgumentPolicy(argumentPolicy());
 
-        return KotonohaMessages.of(messageInterface, config);
+        return KotonohaMessage.createProxy(messageInterface, invocationConfiguration);
     }
 
     private static TranslationArgumentAdaptationPolicy argumentPolicy() {
