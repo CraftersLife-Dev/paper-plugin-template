@@ -12,7 +12,7 @@ paper-api = "1.21.10-R0.1-SNAPSHOT"
 mini-placeholders = "3.0.1"
 configurate = "4.2.0"
 adventure-serializer-configurate = "4.24.0"
-kotonoha = "0.1.0-SNAPSHOT"
+kotonoha = "0.2.0"
 
 [libraries]
 paper-api = { group = "io.papermc.paper", name = "paper-api", version.ref = "paper-api" }
