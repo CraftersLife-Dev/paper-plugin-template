@@ -27,10 +27,15 @@ dependencies {
 
     // Libraries
     compileOnly(libs.configurate.yaml) // Paperに組み込んである
-    runtimeDownload(libs.adventure.serializer.configurate)
-    implementation(libs.kotonoha.message)
-    implementation(libs.kotonoha.message.extra.miniplaceholders)
-    implementation(libs.kotonoha.translator)
+    runtimeDownload(libs.adventure.serializer.configurate) {
+        isTransitive = false
+    }
+    runtimeDownload(libs.kotonoha.message) {
+        exclude(group = "org.jspecify", module = "jspecify")
+    }
+    runtimeDownload(libs.kotonoha.message.extra.miniplaceholders) {
+        exclude(group = "org.jspecify", module = "jspecify")
+    }
 }
 
 val mainPackage = "io.github.crafterslife.dev.papertemplate" // TODO: パッケージ名を変更 (実際のパッケージ名も変更を忘れないように！)
@@ -78,12 +83,6 @@ tasks {
     shadowJar {
         archiveBaseName = paperPluginYaml.name
         archiveClassifier = null as String?
-        gremlin {
-            listOf("xyz.jpenilla.gremlin")
-                .forEach {
-                    relocate(it, "$mainPackage.libs.$it")
-                }
-        }
     }
 
     runServer {
