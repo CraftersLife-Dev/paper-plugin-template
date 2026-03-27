@@ -40,9 +40,9 @@ paperPluginYaml {
     website = "https://github.com/CraftersLife-Dev"
     apiVersion = "1.21.10"
 
-    main = "$mainPackage.core.JavaPluginImpl"
-    bootstrapper = "$mainPackage.core.PluginBootstrapImpl"
-    loader = "$mainPackage.core.PluginLoaderImpl"
+    main = "$mainPackage.JavaPluginImpl"
+    bootstrapper = "$mainPackage.PluginBootstrapImpl"
+    loader = "$mainPackage.PluginLoaderImpl"
 
     permissions {
         register("${paperPluginYaml.name.get().lowercase()}.command.admin") {
@@ -90,7 +90,7 @@ tasks {
         // runディレクトリの中にlog4j2.xmlを突っ込むとログの設定を変更可能
         // Paper: https://github.com/PaperMC/Paper/blob/main/paper-server/src/main/resources/log4j2.xml
         systemProperty("log4j.configurationFile", "log4j2.xml")
-        minecraftVersion("1.21.10")
+        minecraftVersion("1.21.11")
         downloadPlugins {
             modrinth("luckperms", "v5.5.0-bukkit")
             modrinth("miniplaceholders", "4zOT6txC")
